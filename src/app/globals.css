@@ -1,26 +1,186 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Colors */
+/* 
+header footer     #FFCA8D
+
+yellow            #FAB735
+yellow-hover      #F2A30F
+
+orange            #F2680F
+orange-hover      #F2570F
+
+beige             #FBE7BB
+beige-dark        #F6DA9E
+beiga-dark-hover  #EAC984
+
+red               #EF4444
+red-hover         #DC2626
+
+black             #000000
+white             #FFFFFF
+
+gray-light        #D1D5DB
+gray              #9CA3AF
+gray-dark         #374151
+*/
+
+.font-karantina {
+  font-family: var(--font-karantina);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.font-katibeh {
+  font-family: var(--font-katibeh);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes infinite-scroll-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-31% - 200px));
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-infinite-scroll-vertical {
+  animation: infinite-scroll-vertical 7s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes infinite-scroll-horizontal-top {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 5px));
+  }
+}
+
+.animate-infinite-scroll-horizontal-top {
+  animation: infinite-scroll-horizontal-top 40s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  display: flex;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes infinite-scroll-horizontal-team {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 25px));
+  }
+}
+
+.animate-infinite-scroll-horizontal-team {
+  animation: infinite-scroll-horizontal-team 20s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  display: flex;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* @keyframes infinite-scroll-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-70%));
+  }
+}
+
+.animate-infinite-scroll-horizontal {
+  animation: infinite-scroll-horizontal 10s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  display: flex;
+  backface-visibility: hidden;
+  perspective: 1000px;
+} */
+
+@keyframes infinite-scroll-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(calc(-50% - 40px)));
+  }
+}
+
+.animate-infinite-scroll-horizontal {
+  animation: infinite-scroll-horizontal 15s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  display: flex;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.custom-scrollbar-1 {
+  scrollbar-width: thin;
+  padding-right: 16px;
+  scrollbar-color: #f2680f #fbe7bb;
+}
+
+/* Встановлює ширину самого скролбару */
+.custom-scrollbar-1::-webkit-scrollbar {
+  width: 8px; /* Ширина скролбару буде 8 пікселів */
+}
+
+/* Стилізує трек (фон) скролбару */
+.custom-scrollbar-1::-webkit-scrollbar-track {
+  background: #fbe7bb; /* Колір фону скролбару - світло-бежевий */
+  border-radius: 10px; /* Заокруглені кути треку */
+}
+
+/* Стилізує сам повзунок скролбару */
+.custom-scrollbar-1::-webkit-scrollbar-thumb {
+  background: #f2680f; /* Колір повзунка - помаранчевий */
+  border-radius: 10px; /* Заокруглені кути повзунка */
+}
+
+/* Стилізує повзунок при наведенні миші */
+.custom-scrollbar-1::-webkit-scrollbar-thumb:hover {
+  background: #f2680f; /* Темніший відтінок помаранчевого при наведенні */
+}
+
+.custom-scrollbar-2 {
+  scrollbar-width: thin;
+  padding-right: 16px;
+  scrollbar-color: #fbe7bb #f2680f;
+}
+
+/* Встановлює ширину самого скролбару */
+.custom-scrollbar-2::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+/* Стилізує трек (фон) скролбару */
+.custom-scrollbar-2::-webkit-scrollbar-track {
+  background: transparent;
+  background-color: #f2680f;
+}
+
+/* Стилізує сам повзунок скролбару */
+.custom-scrollbar-2::-webkit-scrollbar-thumb {
+  background-color: #fbe7bb;
+  border-radius: 10px;
+}
+
+/* Стилізує повзунок при наведенні миші */
+.custom-scrollbar-2::-webkit-scrollbar-thumb:hover {
+  background-color: #fbe7bb;
+}
+
+.custom-scrollbar-2::-webkit-scrollbar-thumb:active {
+  background-color: #fbe7bb;
 }
