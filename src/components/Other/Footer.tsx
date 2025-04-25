@@ -16,7 +16,7 @@ const Footer = () => {
   return (
     <footer className="relative z-10 mt-46 w-full">
       <Image
-        className="absolute -top-58 md:-top-[230px] lg:-top-50 right-10 md:right-1/2 z-100"
+        className="absolute -top-58 right-10 z-100 md:-top-[230px] md:right-1/2 lg:-top-50"
         src={cats}
         alt=""
         width={250}
@@ -33,8 +33,8 @@ const Footer = () => {
         data-aos="fade-up"
       />
 
-      <div className="relative z-20 w-full rounded-t-4xl bg-[#FFCA8D] px-4 xl:px-16 py-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-4 justify-items-center text-3xl">
+      <div className="relative z-20 w-full rounded-t-4xl bg-[#FFCA8D] px-4 py-4 xl:px-16">
+        <div className="grid grid-cols-1 items-center justify-items-center gap-4 text-3xl md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col items-center gap-1">
             <Image
               src={logo}
@@ -42,7 +42,9 @@ const Footer = () => {
               width={100}
               height={100}
             />
-            <p className="text-xl xl:text-2xl">Fast and Reliable Food Delivery</p>
+            <p className="text-xl xl:text-2xl">
+              Fast and Reliable Food Delivery
+            </p>
           </div>
 
           <p className="text-2xl xl:text-3xl">+38 (093) 459 9239</p>
@@ -100,11 +102,13 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-t-[#374151] py-4 text-2xl">
+        <div className="mt-4 grid grid-cols-1 gap-4 border-t border-t-[#374151] py-4 text-2xl md:grid-cols-2">
           <p className="text-center md:text-left">
             © {new Date().getFullYear()} MAU Delivery. All rights reserved.
           </p>
-          <p className="text-center md:text-right">Made with care for delicious experiences.</p>
+          <p className="text-center md:text-right">
+            Made with care for delicious experiences.
+          </p>
         </div>
       </div>
     </footer>

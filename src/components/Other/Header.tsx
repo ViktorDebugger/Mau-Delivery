@@ -11,7 +11,10 @@ import Window from "../Windows/Window";
 import Dishes from "../Windows/Dishes";
 import Restaurants from "../Windows/Restaurants";
 import Order from "../Windows/Order";
+import UploadDishesButton from "../Admin/UploadDishesButton";
+import UploadRestaurantsButton from "../Admin/UploadRestaurantsButton";
 import logo from "../../../public/images/logo.png";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const [windowDishes, setWindowDishes] = useState<boolean>(false);
@@ -20,7 +23,7 @@ const Header = () => {
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const user = true;
+  const { user } = useAuth();
 
   const handleClose = () => {
     setIsClosing(true);
@@ -69,9 +72,13 @@ const Header = () => {
 
           <nav className="ml-auto hidden md:block">
             <ul className="flex items-center gap-2 text-3xl lg:text-4xl">
-              <li>
-                <Cart />
-              </li>
+              {/* <li>
+                <UploadDishesButton />
+              </li> */}
+              {/* <li>
+                <UploadRestaurantsButton />
+              </li> */}
+              <li>{user && <Cart />}</li>
               <li>
                 <button
                   onClick={handleOpenDishes}
@@ -99,7 +106,7 @@ const Header = () => {
               <li>
                 {user ? (
                   <Link
-                    href="/profile"
+                    href={`/profile/${user.uid}`}
                     className="flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
                   >
                     <span className="-mt-2">Profile</span>
@@ -117,17 +124,17 @@ const Header = () => {
           </nav>
 
           <div className="flex gap-8 md:hidden">
-            <button
-              onClick={() => {
-                handleOpenOrder();
-                toggleMenu(false);
-              }}
-            >
-              <ShoppingBasket size={36} />
-            </button>
-            <button
-              onClick={() => toggleMenu(true)}
-            >
+            {user && (
+              <button
+                onClick={() => {
+                  handleOpenOrder();
+                  toggleMenu(false);
+                }}
+              >
+                <ShoppingBasket size={36} />
+              </button>
+            )}
+            <button onClick={() => toggleMenu(true)}>
               <Menu size={36} />
             </button>
           </div>
@@ -176,7 +183,7 @@ const Header = () => {
               <li>
                 <Link
                   onClick={() => toggleMenu(false)}
-                  href="/profile"
+                  href={`/profile/${user.uid}`}
                   className="flex h-12 cursor-pointer items-center justify-center rounded-4xl px-5 transition-colors duration-300 ease-in-out hover:bg-[#FAB735]"
                 >
                   <span className="-mt-2">Profile</span>

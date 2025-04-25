@@ -20,16 +20,21 @@ const Status = ({ handleClose }: WindowStatusProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <button onClick={handleClose} className="absolute top-4 right-3 block md:hidden">
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-3 block md:hidden"
+      >
         <X size={32} />
       </button>
-      <h1 className="font-karantina text-center text-6xl md:text-8xl">Order Status</h1>{" "}
-      <div className="relative mt-10 h-2 md:h-4 w-9/10 rounded-full bg-[#F2680F]">
+      <h1 className="font-karantina text-center text-6xl md:text-8xl">
+        Order Status
+      </h1>{" "}
+      <div className="relative mt-10 h-2 w-9/10 rounded-full bg-[#F2680F] md:h-4">
         <ul className="flex justify-between text-3xl">
           {strings.map((str, index) => (
-            <li key={index} className="relative -top-1 md:-top-2 z-10">
+            <li key={index} className="relative -top-1 z-10 md:-top-2">
               <div
-                className={`w-4 h-4 md:h-8 md:w-8 rounded-full ${
+                className={`h-4 w-4 rounded-full md:h-8 md:w-8 ${
                   index < 3 ? "bg-[#EF4444]" : "bg-[#F2680F]"
                 }`}
               ></div>
@@ -40,8 +45,8 @@ const Status = ({ handleClose }: WindowStatusProps) => {
           ))}
         </ul>
       </div>
-      <div className="mt-16 flex flex-col md:flex-row w-full items-center justify-between text-3xl">
-        <div className="flex w-full md:w-4/10 items-center gap-4 rounded-4xl bg-[#F2680F] p-4">
+      <div className="mt-16 flex w-full flex-col items-center justify-between text-3xl md:flex-row">
+        <div className="flex w-full items-center gap-4 rounded-4xl bg-[#F2680F] p-4 md:w-4/10">
           <div className="w-2/10 xl:w-3/10">
             <Image
               src={courier}
@@ -56,13 +61,12 @@ const Status = ({ handleClose }: WindowStatusProps) => {
             <p>+380000000000</p>
           </div>
         </div>
-        <div className="w-full flex justify-center md:w-2/10 mt-4 md:mt-0">
+        <div className="mt-4 flex w-full justify-center md:mt-0 md:w-2/10">
           <Image
             src={status}
             alt="User Profile"
             width={200}
             height={250}
-            className=""
           />
         </div>
       </div>

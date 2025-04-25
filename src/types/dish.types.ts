@@ -4,7 +4,6 @@ export interface Dish {
   name: string;
   rating: number;
   description: string;
-  weight: string;
   price: number;
   ingredients: string[];
   image: string;
@@ -15,14 +14,18 @@ export interface Dish {
     fat: number;
     carbs: number;
   };
-  reviews: Review[];
 }
 
-export interface Review {
+export interface ReviewDish {
+  userId: string;
+  dishId: string;
+  dishName: string;
   username: string;
   rating: number;
   text: string;
   avatar?: string;
+  stars: number;
+  type: "dish";
 }
 
 export interface Nutrition {

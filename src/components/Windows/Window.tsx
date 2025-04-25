@@ -22,10 +22,14 @@ const Window = ({
       setIsAnimating(false);
     });
 
+    document.body.classList.add("overflow-hidden");
+
     return () => {
       cancelAnimationFrame(animationFrame);
+      document.body.classList.remove("overflow-hidden");
     };
   }, []);
+
 
   return (
     <div

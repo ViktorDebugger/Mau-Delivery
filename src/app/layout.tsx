@@ -2,9 +2,12 @@ import Head from "next/head";
 import type { Metadata } from "next";
 import { Karantina, Katibeh } from "next/font/google";
 
-import { CartProvider } from "@/context/CartContext";
-import ClientWrapper from "@/context/ClientWrapper";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import ClientWrapper from "@/context/ClientWrapper";
 import "./globals.css";
 
 const karantina = Karantina({
@@ -37,9 +40,17 @@ export default function RootLayout({
       <body
         className={`${karantina.variable} ${katibeh.variable} font-katibeh w-full bg-[#FBE7BB]`}
       >
-        <CartProvider>
-          <ClientWrapper>{children}</ClientWrapper>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+              <ClientWrapper>{children}</ClientWrapper>
+              <ToastContainer
+                position="top-center"
+                hideProgressBar={true}
+                autoClose={3000}
+                closeOnClick
+              />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

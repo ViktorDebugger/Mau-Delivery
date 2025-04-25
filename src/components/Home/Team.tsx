@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import CardTeamPerson from "@/components/Home/CardTeamPerson";
 
 export interface TeamPerson {
@@ -13,33 +11,33 @@ const Team = () => {
   const team: TeamPerson[] = [
     {
       id: 1,
-      image: "/images/team/viktor.png",
+      image: "/images/team/viktor.jpg",
       fullname: "Viktor Luka",
-      role: "💻 Fullstack Developer",
+      role: "Full-stack Developer",
     },
     {
       id: 2,
       image: "/images/team/roman.jpg",
       fullname: "Roman Yushchyk",
-      role: "💡 Idea generator",
+      role: "Quality Assurance",
     },
     {
       id: 3,
       image: "/images/team/oleg.jpg",
       fullname: "Oleg Odynets",
-      role: "🔍 Tester",
+      role: "Tester",
     },
     {
       id: 4,
       image: "/images/team/alice.jpg",
       fullname: "Alice Laura Rojtburd",
-      role: "📚 Documentation",
+      role: "Data Analytytic",
     },
     {
       id: 5,
       image: "/images/team/zhenyok.png",
       fullname: "Yevheniya Marynchak",
-      role: "🎨 Designer",
+      role: "UI/UX",
     },
   ];
 
@@ -49,7 +47,7 @@ const Team = () => {
         <h1 className="font-karantina relative z-1 text-center text-8xl">
           Our Team
         </h1>
-        <div className="relative flex overflow-hidden mt-6">
+        <div className="relative mt-6 flex overflow-hidden">
           <ul className="animate-infinite-scroll-horizontal-team flex shrink-0 gap-12">
             {team.map((person) => (
               <CardTeamPerson key={person.id} person={person} />

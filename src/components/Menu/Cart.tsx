@@ -9,12 +9,13 @@ import { ShoppingBasket, ChevronUp, ChevronDown, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Order from "../Windows/Order";
 import Window from "../Windows/Window";
-import { dishesData } from "../../../public/DishesData";
+import type { CartItem } from "@/types/cart.types";
 
 const Cart = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { cart, setCart } = useCart();
+  const cartItems: CartItem[] = cart;
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [windowOrder, setWindowOrder] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState<boolean>(false);
@@ -51,7 +52,7 @@ const Cart = () => {
   };
 
   const findDish = (dishId: string) => {
-    return dishesData.find((dish) => dish.id === dishId);
+    return cart.find((item) => item.dishId === dishId);
   };
 
   const handleIncreaseQuantity = (dishId: string) => {
@@ -108,11 +109,11 @@ const Cart = () => {
         </div>
         <motion.div
           layout
-          className={`absolute top-18 -left-10 z-1 flex h-[430px] w-[500px] flex-col justify-between gap-2 rounded-4xl border-4 border-[#FAB735] bg-[#F2680F] p-4 shadow-2xl transition-all duration-300 ease-in-out ${
+          className={`absolute top-18 -left-10 z-1 flex flex-col justify-between gap-2 rounded-4xl border-4 border-[#FAB735] bg-[#F2680F] p-4 shadow-2xl transition-all duration-300 ease-in-out ${
             isOpen
               ? "visible translate-y-0 opacity-100"
               : "pointer-events-none invisible -translate-y-2 opacity-0"
-          }`}
+          } ${cart.length ? "h-[430px] w-[500px]" : "h-[100px] w-[150px]"}`}
         >
           {cart.length ? (
             <>
@@ -122,7 +123,7 @@ const Cart = () => {
                 className="custom-scrollbar-2 flex h-3/4 flex-col gap-2 overflow-y-auto"
               >
                 <AnimatePresence mode="sync">
-                  {cart.map((item) => (
+                  {cartItems.map((item) => (
                     <motion.li
                       key={item.dishId}
                       initial={{ opacity: 0 }}
@@ -136,16 +137,19 @@ const Cart = () => {
                       className="flex justify-between gap-1 rounded-2xl bg-[#FBE7BB] p-2 text-2xl"
                     >
                       <div className="flex gap-4">
-                        <Image
-                          className="rounded-2xl"
-                          src={findDish(item.dishId)?.image || ""}
-                          alt="dish"
-                          width={72}
-                          height={70}
-                        />
+                        <div className="w-16 h-16 overflow-hidden relative">
+                          <Image
+                            className="rounded-2xl object-cover"
+                            src={item.image}
+                            alt="dish"
+                            fill
+                            sizes="64px"
+
+                          />
+                        </div>
                         <div>
                           <h1 className="line-clamp-1">
-                            {findDish(item.dishId)?.name}
+                            {item.name}
                           </h1>
                           <p>{item.price} UAN</p>
                         </div>

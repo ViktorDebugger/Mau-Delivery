@@ -9,8 +9,19 @@ const VerticalTrace = () => {
       <div className="flex flex-col gap-[100px]">
         {[...Array(5)].map((_, index) => (
           <div key={index} className="flex flex-col gap-[100px]">
-            <Image src={rightTrace} alt="" width={130} height={300} />
-            <Image src={leftTrace} alt="" width={130} height={300} />
+            <Image
+              src={rightTrace}
+              alt=""
+              width={130}
+              height={300}
+            />
+            <Image
+              src={leftTrace}
+              alt=""
+              width={130}
+              height={300}
+              
+            />
           </div>
         ))}
       </div>

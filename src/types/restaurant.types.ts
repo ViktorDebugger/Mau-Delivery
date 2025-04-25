@@ -1,17 +1,19 @@
 export interface Restaurant {
-  id: string;
+  id?: string;
   name: string;
   image: string;
   address: string;
   rating: number;
-  cuisine: string;
-  description: string;
-  reviews: Review[];
 }
 
-export interface Review {
+export interface ReviewRestaurant {
+  userId: string;
+  restaurantId: string;
+  restaurantName: string;
   username: string;
   rating: number;
   text: string;
-  avatar: string;
+  avatar?: string;
+  stars: number;
+  type: "restaurant";
 }

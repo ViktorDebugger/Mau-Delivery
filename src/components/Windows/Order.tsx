@@ -3,22 +3,110 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, X } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 import { useCart } from "@/context/CartContext";
-import { dishesData } from "../../../public/DishesData";
+import { getUserData } from "@/db/User";
+import { saveOrder } from "@/db/Order";
 
 interface WindowDishesProps {
   handleClose: () => void;
 }
 
 const Order = ({ handleClose }: WindowDishesProps) => {
+  const { user } = useAuth();
   const { cart, setCart } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
   const [selectTimeAuto, setSelectTimeAuto] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>("");
 
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [cardExpiry, setCardExpiry] = useState<string>("");
+  const [cardCVC, setCardCVC] = useState<string>("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const data = await getUserData(user.uid);
+        setFirstName(data!.firstName);
+        setLastName(data!.lastName);
+        setPhone(data!.phone);
+        setEmail(data!.email);
+        setAddress(data!.address);
+      }
+    };
+    fetchUserData();
+  }, [user]);
+
+  const isValidTime = (time: string): boolean => {
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Формат HH:MM (24-годинний)
+    return timeRegex.test(time);
+  };
+
+  const handleSubmit = async () => {
+    // Перевірка часу
+    if (!selectTimeAuto && !isValidTime(selectedTime)) {
+      toast.error("Invalid time format. Please use HH:MM format.", {
+        className: "toast-error",
+        icon: false,
+      });
+      return; // Зупиняємо виконання, якщо час некоректний
+    }
+
+    const orderData = {
+      totalAmount: cart.reduce((accum, cur) => accum + cur.price, 0),
+      totalQuantity: cart.reduce((accum, cur) => accum + cur.quantity, 0),
+      paymentMethod,
+      selectedTime: selectTimeAuto ? "As soon as possible" : selectedTime,
+      comment,
+      dishes: cart.map((item) => ({
+        dishId: item.dishId,
+        restaurantId: item.restaurantId,
+        restaurant: item.restaurant,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+        name: item.name,
+      })),
+      cardDetails:
+        paymentMethod === "card" ? { cardNumber, cardExpiry, cardCVC } : null,
+      userId: user?.uid || "",
+      user: {
+        firstName: firstName || "",
+        lastName: lastName || "",
+        phone: phone || "",
+        email: email || "",
+        address: address || "",
+      },
+    };
+
+    try {
+      await saveOrder(orderData);
+      toast.success(`Order successfully created!`, {
+        className: "toast-success",
+        icon: false,
+      });
+      setCart([]);
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to create order. Please try again.", {
+        className: "toast-error",
+        icon: false,
+      });
+      console.error("Failed to save order:", error);
+    }
+  };
+
   const findDish = (dishId: string) => {
-    return dishesData.find((dish) => dish.id === dishId);
+    return cart.find((item) => item.dishId === dishId);
   };
   const handleIncreaseQuantity = (dishId: string) => {
     setCart((prevCart) =>
@@ -62,7 +150,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
   }, [cart]);
 
   return (
-    <div className="custom-scrollbar-1 grid grid-cols-1 gap-8 overflow-y-auto text-2xl md:grid-cols-2 h-[calc(100vh-100px)]">
+    <div className="custom-scrollbar-1 grid h-[calc(100vh-100px)] grid-cols-1 gap-8 overflow-y-auto text-2xl md:grid-cols-2">
       <button
         onClick={handleClose}
         className="absolute top-2 right-2 block lg:hidden"
@@ -93,17 +181,17 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                       className="flex justify-between gap-1 rounded-2xl bg-[#FBE7BB] p-2"
                     >
                       <div className="flex gap-4">
-                        <Image
-                          className="rounded-2xl"
-                          src={findDish(item.dishId)?.image || ""}
-                          alt="dish"
-                          width={72}
-                          height={70}
-                        />
+                        <div className="relative h-16 w-16 overflow-hidden">
+                          <Image
+                            className="rounded-2xl object-cover"
+                            src={item.image}
+                            alt="dish"
+                            fill
+                            sizes="64px"
+                          />
+                        </div>
                         <div>
-                          <h1 className="line-clamp-1">
-                            {findDish(item.dishId)?.name}
-                          </h1>
+                          <h1 className="line-clamp-1">{item.name}</h1>
                           <p>{item.price} UAN</p>
                         </div>
                       </div>
@@ -155,7 +243,10 @@ const Order = ({ handleClose }: WindowDishesProps) => {
           )}
         </div>
 
-        <button className="mt-4 w-1/3 cursor-pointer rounded-full bg-[#F2680F] pb-2 text-3xl transition-colors duration-300 ease-in-out hover:bg-[#F2570F]">
+        <button
+          onClick={handleSubmit}
+          className="mt-4 w-1/3 cursor-pointer rounded-full bg-[#F2680F] pb-2 text-3xl transition-colors duration-300 ease-in-out hover:bg-[#F2570F]"
+        >
           Submit
         </button>
       </div>
@@ -166,34 +257,46 @@ const Order = ({ handleClose }: WindowDishesProps) => {
             type="text"
             className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
             placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <input
             type="text"
             className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
             placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
           <input
             type="text"
             className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
             placeholder="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <input
             type="text"
             className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
             placeholder="Email"
-          />
-          <input
-            type="text"
-            className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
-            placeholder="City"
-          />
-          <input
-            type="text"
-            className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
-            placeholder="Street, 40"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <h1 className="my-4 text-center text-3xl">Payment method</h1>
+        <input
+          type="text"
+          className="mt-4 rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
+          placeholder="Street, 40"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <textarea
+          className="mt-4 cursor-pointer resize-none rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
+          placeholder="Comment on the order"
+          maxLength={140}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        ></textarea>
+        <h1 className="my-1 text-center text-3xl">Payment method</h1>
         <div className="flex w-full justify-center gap-4">
           <button
             onClick={() => setPaymentMethod("card")}
@@ -234,6 +337,8 @@ const Order = ({ handleClose }: WindowDishesProps) => {
               placeholder="Number"
               maxLength={16}
               autoComplete="off"
+              value={cardNumber}
+              onChange={(e) => setCardNumber(e.target.value)}
             />
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -242,6 +347,8 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                 placeholder="Valid until"
                 maxLength={5}
                 autoComplete="off"
+                value={cardExpiry}
+                onChange={(e) => setCardExpiry(e.target.value)}
               />
               <input
                 type="text"
@@ -249,6 +356,8 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                 placeholder="Code"
                 maxLength={3}
                 autoComplete="off"
+                value={cardCVC}
+                onChange={(e) => setCardCVC(e.target.value)}
               />
             </div>
           </div>
@@ -273,11 +382,6 @@ const Order = ({ handleClose }: WindowDishesProps) => {
             onChange={(e) => setSelectedTime(e.target.value)}
           />
         </div>
-        <textarea
-          className="mt-4 cursor-pointer resize-none rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
-          placeholder="Comment on the order"
-          maxLength={140}
-        ></textarea>
       </div>
     </div>
   );

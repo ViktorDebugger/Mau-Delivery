@@ -38,14 +38,13 @@ gray-dark         #374151
     transform: translateY(0);
   }
   100% {
-    transform: translateY(calc(-31% - 200px));
+    transform: translateY(calc(-52% - 200px));
   }
 }
 
 .animate-infinite-scroll-vertical {
-  animation: infinite-scroll-vertical 7s linear infinite;
+  animation: infinite-scroll-vertical 10s linear infinite;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
   display: flex;
   flex-direction: column;
   backface-visibility: hidden;
@@ -88,24 +87,6 @@ gray-dark         #374151
   perspective: 1000px;
 }
 
-/* @keyframes infinite-scroll-horizontal {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-70%));
-  }
-}
-
-.animate-infinite-scroll-horizontal {
-  animation: infinite-scroll-horizontal 10s linear infinite;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  display: flex;
-  backface-visibility: hidden;
-  perspective: 1000px;
-} */
-
 @keyframes infinite-scroll-horizontal {
   0% {
     transform: translateX(0);
@@ -116,7 +97,7 @@ gray-dark         #374151
 }
 
 .animate-infinite-scroll-horizontal {
-  animation: infinite-scroll-horizontal 15s linear infinite;
+  animation: infinite-scroll-horizontal 25s linear infinite;
   will-change: transform;
   transform: translate3d(0, 0, 0);
   display: flex;
@@ -183,4 +164,41 @@ gray-dark         #374151
 
 .custom-scrollbar-2::-webkit-scrollbar-thumb:active {
   background-color: #fbe7bb;
+}
+
+.toast-success {
+  background-color: #fbe7bb;
+  color: #000000;
+  font-family: "Katibeh", sans-serif;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.toast-error {
+  background-color: #ef4444;
+  color: #000000;
+  font-family: "Katibeh", sans-serif;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden; /* Сховати кнопку завантаження */
+}
+
+input[type="file"] {
+  position: relative; /* Встановити позицію для абсолютного позиціонування */
+}
+
+input[type="file"]::before {
+  content: "";
+}
+
+input[type="file"]:hover::before {
+  background: #F2570F; /* Зміна кольору при наведенні */
 }
