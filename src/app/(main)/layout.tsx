@@ -1,11 +1,7 @@
 import Header from "@/components/Other/Header";
 import Footer from "@/components/Other/Footer";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header />
@@ -13,4 +9,6 @@ export default function AuthLayout({
       <Footer />
     </div>
   );
-}
+};
+
+export default AuthLayout;

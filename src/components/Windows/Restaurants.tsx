@@ -1,24 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-
 import { useState, useEffect, useMemo } from "react";
 import { X } from "lucide-react";
 import { MoonLoader } from "react-spinners";
-
 import { getAllRestaurantsFromFirestore } from "@/db/Restaurant";
-
 import SearchInput from "../Other/SearchInput";
-import type { Restaurant } from "@/types/restaurant.types";
+import type { RestaurantType } from "@/types/restaurant.types";
 
 interface WindowRestaurantsProps {
   handleClose: () => void;
 }
 
 const Restaurants = ({ handleClose }: WindowRestaurantsProps) => {
-  const [restaurantsData, setRestaurantsData] = useState<Restaurant[]>([]);
+  const [restaurantsData, setRestaurantsData] = useState<RestaurantType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
-
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -34,8 +30,8 @@ const Restaurants = ({ handleClose }: WindowRestaurantsProps) => {
     fetchRestaurants();
   }, []);
 
-  const filteredRestaurants: Restaurant[] = useMemo(() => {
-    const results = restaurantsData.filter((restaurant: Restaurant) => {
+  const filteredRestaurants: RestaurantType[] = useMemo(() => {
+    const results = restaurantsData.filter((restaurant: RestaurantType) => {
       const term = searchTerm.toLowerCase();
       return restaurant.name?.toLowerCase().includes(term);
     });
@@ -70,7 +66,7 @@ const Restaurants = ({ handleClose }: WindowRestaurantsProps) => {
           Restaurants not found
         </div>
       ) : (
-        <div className="custom-scrollbar-1 mt-2 max-h-[500px] overflow-y-auto lg:mt-8 lg:max-h-[520px]">
+        <div className="custom-scrollbar-1 mt-2 overflow-y-auto lg:mt-8 max-h-9/10 h-full">
           <ul className="mt-2 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {filteredRestaurants.map((restaurant) => (
               <li

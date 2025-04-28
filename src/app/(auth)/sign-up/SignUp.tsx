@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import { saveUserData } from "@/db/User";
 import { toast } from "react-toastify";
-import type { User1 } from "@/types/user.types";
+import type { UserData } from "@/types/user.types";
 import { Plus, Minus } from "lucide-react";
 import { uploadUserImageToCloudinary } from "@/db/Cloundinary";
 import { useAuth } from "@/context/AuthContext";
@@ -12,21 +12,20 @@ import { MoonLoader } from "react-spinners";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Quotes from "@/components/Decorations/Quotes";
+import { userIcon } from "@/types/user.types";
 
-const SignUpClient = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+const SignUp = () => {
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [allergensInput, setAllergensInput] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
-
   const [loading, setLoading] = useState<boolean>(false);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { register } = useAuth();
   const router = useRouter();
@@ -54,8 +53,12 @@ const SignUpClient = () => {
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       return;
     }
@@ -69,7 +72,7 @@ const SignUpClient = () => {
       const allergensArray = allergensInput
         .split(",")
         .map((allergen) => allergen.trim());
-      const userData: User1 = {
+      const userData: UserData = {
         firstName,
         lastName,
         email,
@@ -86,21 +89,33 @@ const SignUpClient = () => {
         await saveUserData(user.uid, userData);
       } catch (error) {
         toast.error("Failed to upload image!", {
-          className: "toast-error",
+          className: "toast-error custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+          closeOnClick: true,
           icon: false,
+          position: "top-center",
         });
         console.error("Failed to upload image:", error);
       }
       toast.success("User registered and data saved!", {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.log("User registered and data saved!");
       router.push(`/profile/${user.uid}`);
     } catch (error) {
       toast.error("Error registering user!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Error registering user: ", error);
     } finally {
@@ -226,7 +241,7 @@ const SignUpClient = () => {
                       <label
                         className={`text-opacity-10 hover:text-opacity-90 relative h-40 w-40 cursor-pointer rounded-2xl bg-cover bg-center text-black opacity-70 transition-opacity duration-300 ease-in-out hover:opacity-90 focus:outline-none`}
                         style={{
-                          backgroundImage: `url(${backgroundImage || "/images/icons/user.png"})`,
+                          backgroundImage: `url(${backgroundImage || userIcon})`,
                         }}
                       >
                         <input
@@ -234,6 +249,7 @@ const SignUpClient = () => {
                           accept="image/*"
                           onChange={handleImageChange}
                           ref={fileInputRef}
+                          className="bg-[#D1D5DB]"
                         />
                         {!backgroundImage && (
                           <div className="pointer-events-none absolute top-15 left-16 z-10 cursor-pointer rounded-full bg-[#374151]/50 p-1 transition-colors hover:bg-[#374151]/70">
@@ -276,4 +292,4 @@ const SignUpClient = () => {
   );
 };
 
-export default SignUpClient;
+export default SignUp;

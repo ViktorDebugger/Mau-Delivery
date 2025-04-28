@@ -25,7 +25,7 @@ export const uploadUserImageToCloudinary = async (file: File) => {
     const uploadResponse = await cloudinary.uploader.upload(
       `data:${file.type};base64,${buffer.toString("base64")}`,
       {
-        folder: "user",
+        folder: "users",
         public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`,
         format: "webp",
       },

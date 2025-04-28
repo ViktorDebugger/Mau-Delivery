@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-const ClientWrapper = ({ children }: { children: React.ReactNode }) => {
+const AnimationWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     AOS.init({
-      duration: 500,
+      duration: 400,
       once: true,
-      disable: function () {
+      offset: -200,
+      disable: () => {
         return window.innerWidth < 1000;
       },
     });
@@ -18,4 +19,4 @@ const ClientWrapper = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-export default ClientWrapper;
+export default AnimationWrapper;

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-
-import type { Nutrition } from "@/types/dish.types";
+import type { NutritionType } from "@/types/dish.types";
 
 interface CaloriesProps {
-  nutrition: Nutrition;
+  nutrition: NutritionType;
 }
 
 const Calories = ({ nutrition }: CaloriesProps) => {
@@ -25,9 +24,9 @@ const Calories = ({ nutrition }: CaloriesProps) => {
     };
   }, []);
 
-  function handleOpen() {
+  const handleOpen = () => {
     setIsOpen((o) => !o);
-  }
+  };
 
   return (
     <div className="relative" ref={menuRef}>

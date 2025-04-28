@@ -10,9 +10,9 @@ import {
   getDocs,
   getDoc,
 } from "firebase/firestore";
-import type { Dish1 } from "@/types/dish.types";
+import type { DishType } from "@/types/dish.types";
 
-export const addDishToFirestore = async (dish: Dish1) => {
+export const addDishToFirestore = async (dish: DishType) => {
   try {
     const docRef = await addDoc(collection(db, "dishes"), dish);
     console.log("Document written with ID: ", docRef.id);
@@ -21,19 +21,19 @@ export const addDishToFirestore = async (dish: Dish1) => {
   }
 };
 
-export const addAllDishesToFirestore = async (dishes: Dish1[]) => {
+export const addAllDishesToFirestore = async (dishes: DishType[]) => {
   for (const dish of dishes) {
     await addDishToFirestore(dish);
   }
 };
 
-export const getAllDishesFromFirestore = async (): Promise<Dish1[] | []> => {
+export const getAllDishesFromFirestore = async (): Promise<DishType[] | []> => {
   try {
     const querySnapshot = await getDocs(collection(db, "dishes"));
-    const dishes: Dish1[] = [];
+    const dishes: DishType[] = [];
 
     querySnapshot.forEach((doc) => {
-      dishes.push({ id: doc.id, ...doc.data() } as Dish1);
+      dishes.push({ id: doc.id, ...doc.data() } as DishType);
     });
 
     return dishes;
@@ -43,13 +43,13 @@ export const getAllDishesFromFirestore = async (): Promise<Dish1[] | []> => {
   }
 };
 
-export const getDishById = async (id: string): Promise<Dish1 | null> => {
+export const getDishById = async (id: string): Promise<DishType | null> => {
   try {
     const docRef = doc(db, "dishes", id);
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
-      return { id: docSnapshot.id, ...docSnapshot.data() } as Dish1;
+      return { id: docSnapshot.id, ...docSnapshot.data() } as DishType;
     } else {
       console.log("No such document!");
       return null;
@@ -62,17 +62,17 @@ export const getDishById = async (id: string): Promise<Dish1 | null> => {
 
 export const getDishesByRestaurantName = async (
   restaurantName: string,
-): Promise<Dish1[] | []> => {
+): Promise<DishType[] | []> => {
   try {
     const q = query(
       collection(db, "dishes"),
       where("restaurant", "==", restaurantName),
     );
     const querySnapshot = await getDocs(q);
-    const dishes: Dish1[] = [];
+    const dishes: DishType[] = [];
 
     querySnapshot.forEach((doc) => {
-      dishes.push({ id: doc.id, ...doc.data() } as Dish1);
+      dishes.push({ id: doc.id, ...doc.data() } as DishType);
     });
 
     return dishes;

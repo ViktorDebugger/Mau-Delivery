@@ -1,11 +1,11 @@
-import ChangePasswordClientComponent from "./ChangePasswordClientComponent";
+import ChangePassword from "./ChangePassword";
 
 export const metadata = {
   title: "Change Password",
 };
 
-const ResetPassword = () => {
-  return <ChangePasswordClientComponent />;
+const ChangePasswordPage = () => {
+  return <ChangePassword />;
 };
 
-export default ResetPassword;
+export default ChangePasswordPage;

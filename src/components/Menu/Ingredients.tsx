@@ -23,9 +23,9 @@ const Ingredients = ({ ingradients }: CaloriesProps) => {
     };
   }, []);
 
-  function handleOpen() {
+  const handleOpen = () => {
     setIsOpen((o) => !o);
-  }
+  };
 
   return (
     <div className="relative" ref={menuRef}>
@@ -37,19 +37,21 @@ const Ingredients = ({ ingradients }: CaloriesProps) => {
           Ingredients
         </button>
         <div
-          className={`absolute -left-6 bottom-14 z-40 w-60 rounded-4xl border-4 border-[#F2680F] bg-[#FAB735] p-4 shadow-2xl transition-all duration-300 ease-in-out ${
+          className={`absolute bottom-14 -left-6 z-40 w-60 rounded-4xl border-4 border-[#F2680F] bg-[#FAB735] p-4 shadow-2xl transition-all duration-300 ease-in-out ${
             isOpen
               ? "visible -translate-y-2 opacity-100"
               : "pointer-events-none invisible translate-y-0 opacity-0"
           }`}
         >
           <ul className="flex flex-col gap-2 text-2xl">
-            {ingradients.map(ingradient => (
-                <li key={ingradient} className="flex justify-between rounded-2xl bg-[#F2680F] px-2 py-1">
-              <span>{ingradient} kcal</span>
-            </li>
+            {ingradients.map((ingradient) => (
+              <li
+                key={ingradient}
+                className="flex justify-between rounded-2xl bg-[#F2680F] px-2 py-1"
+              >
+                <span>{ingradient} kcal</span>
+              </li>
             ))}
-            
           </ul>
         </div>
       </div>

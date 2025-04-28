@@ -17,7 +17,6 @@ export interface FilterValues {
 
 const Filter = ({ isOpen, onClose, onApply, onOpen }: FilterProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
-
   const [minPrice, setMinPrice] = useState<number | "">("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
   const [minRating, setMinRating] = useState<number | "">("");
@@ -34,7 +33,7 @@ const Filter = ({ isOpen, onClose, onApply, onOpen }: FilterProps) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutsideMenu);
     };
-  }, []);
+  }, [onClose]);
 
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -119,7 +118,7 @@ const Filter = ({ isOpen, onClose, onApply, onOpen }: FilterProps) => {
       </button>
 
       <div
-        className={`absolute top-12 md:-right-24 right-0 z-3 w-58 rounded-4xl border-4 border-[#F2680F] bg-[#FAB735] py-4 shadow-lg transition-all duration-300 ease-in-out ${
+        className={`absolute top-12 right-0 z-3 w-58 rounded-4xl border-4 border-[#F2680F] bg-[#FAB735] py-4 shadow-lg transition-all duration-300 ease-in-out md:-right-24 ${
           isOpen
             ? "visible translate-y-0 opacity-100"
             : "pointer-events-none invisible -translate-y-2 opacity-0"

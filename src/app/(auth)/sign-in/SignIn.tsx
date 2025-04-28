@@ -9,12 +9,11 @@ import { toast } from "react-toastify";
 import Quotes from "@/components/Decorations/Quotes";
 import { MoonLoader } from "react-spinners";
 
-const SignInClientComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const SignIn = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { login } = useAuth();
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -25,14 +24,22 @@ const SignInClientComponent = () => {
       const loggedInUser = userCredential.user;
 
       toast.success("Successfully logged in!", {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       router.push(`/profile/${loggedInUser!.uid}`);
     } catch (error) {
       toast.error("Error logging in!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Error logging in: ", error);
     } finally {
@@ -106,7 +113,7 @@ const SignInClientComponent = () => {
                   </Link>
                 </div>
                 <div className="flex justify-center gap-4 text-2xl">
-                  <span>Don't have an account?</span>
+                  <span>Don&apos;t have an account?</span>
                   <Link href={"/sign-up"} className="font-bold underline">
                     Sign Up
                   </Link>
@@ -120,4 +127,4 @@ const SignInClientComponent = () => {
   );
 };
 
-export default SignInClientComponent;
+export default SignIn;

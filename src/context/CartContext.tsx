@@ -1,31 +1,32 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { CartItem } from "@/types/cart.types";
+import { CartItemType } from "@/types/cart.types";
 
 interface CartContextType {
-  cart: CartItem[];
-  setCart: (cart: CartItem[] | ((prev: CartItem[]) => CartItem[])) => void;
+  cart: CartItemType[];
+  setCart: (
+    cart: CartItemType[] | ((prev: CartItemType[]) => CartItemType[]),
+  ) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [cart, setCart] = useLocalStorage<CartItemType[]>("cart", []);
 
   return (
     <CartContext.Provider value={{ cart, setCart }}>
       {children}
     </CartContext.Provider>
   );
-}
+};
 
-export function useCart() {
+export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;
-}
+};

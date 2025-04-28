@@ -1,4 +1,4 @@
-export interface Dish {
+export interface DishType {
   id: string;
   restaurant: string;
   name: string;
@@ -16,7 +16,7 @@ export interface Dish {
   };
 }
 
-export interface ReviewDish {
+export interface ReviewDishType {
   userId: string;
   dishId: string;
   dishName: string;
@@ -26,9 +26,10 @@ export interface ReviewDish {
   avatar?: string;
   stars: number;
   type: "dish";
+  timestamp: string;
 }
 
-export interface Nutrition {
+export interface NutritionType {
   calories: number;
   protein: number;
   fat: number;

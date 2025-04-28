@@ -1,16 +1,14 @@
 "use client";
 
 import Image from "next/image";
-
 import { useEffect, useState } from "react";
-
 import Status from "../Windows/Status";
 import Window from "../Windows/Window";
 import Comment from "../Windows/Comment";
-import type { Order } from "@/types/cart.types";
+import type { OrderType } from "@/types/cart.types";
 
 interface OrderProps {
-  order: Order;
+  order: OrderType;
 }
 
 const Order = ({ order }: OrderProps) => {
@@ -20,13 +18,10 @@ const Order = ({ order }: OrderProps) => {
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<
     string | null
   >(null);
-  const [selectedTitle, setSelectedTitle] = useState<string>(""); // Додано стан для збереження назви
-
-  // Два окремі стани для модальних вікон
+  const [selectedTitle, setSelectedTitle] = useState<string>("");
   const [windowDishComment, setWindowDishComment] = useState<boolean>(false);
   const [windowRestaurantComment, setWindowRestaurantComment] =
     useState<boolean>(false);
-
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const handleClose = () => {
@@ -37,7 +32,7 @@ const Order = ({ order }: OrderProps) => {
       setWindowRestaurantComment(false);
       setSelectedDishId(null);
       setSelectedRestaurantId(null);
-      setSelectedTitle(""); // Скидаємо назву
+      setSelectedTitle("");
       setIsClosing(false);
     }, 300);
   };
@@ -49,52 +44,44 @@ const Order = ({ order }: OrderProps) => {
 
   const handleOpenDishComment = (dishId: string, dishName: string) => {
     setSelectedDishId(dishId);
-    setSelectedTitle(dishName); // Зберігаємо назву страви
+    setSelectedTitle(dishName);
     setIsClosing(false);
     setWindowDishComment(true);
   };
 
   const handleOpenRestaurantComment = (
     restaurantId: string,
-    restaurantName: string
+    restaurantName: string,
   ) => {
     console.log("restaurantId", restaurantId);
     setSelectedRestaurantId(restaurantId);
-    setSelectedTitle(restaurantName); // Зберігаємо назву ресторану
+    setSelectedTitle(restaurantName);
     setIsClosing(false);
     setWindowRestaurantComment(true);
   };
 
   useEffect(() => {
-    const createdAt = new Date(order.createdAt).getTime();
-    const now = Date.now();
-    const duration =
-      order.paymentMethod === "card" ? 2 * 60 * 60 * 1000 : 30 * 60 * 1000; // 2 години для картки, 30 хвилин для готівки
-    const difference = createdAt + duration - now;
+    const endTime = new Date(order.selectedTime).getTime();
 
-    setTimeLeft(difference > 0 ? difference : 0);
+    const updateTimer = () => {
+      const now = Date.now();
+      const difference = endTime - now;
+      setTimeLeft(difference > 0 ? difference : 0);
+    };
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1000 : 0));
-    }, 1000);
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
 
     return () => clearInterval(timer);
-  }, [order]);
-
-  const formattedDate = new Date(order.createdAt).toLocaleString(undefined, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+  }, [order.selectedTime]);
 
   const formatTimeLeft = (time: number) => {
     const seconds = Math.floor((time / 1000) % 60);
     const minutes = Math.floor((time / 1000 / 60) % 60);
     const hours = Math.floor((time / 1000 / 60 / 60) % 24);
-    return `${hours}h ${minutes}m ${seconds}s`;
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -104,9 +91,18 @@ const Order = ({ order }: OrderProps) => {
         data-aos="fade-up"
       >
         <div className="flex flex-col items-center justify-between gap-4 rounded-2xl bg-[#FBE7BB] p-4 text-xl leading-[1] sm:text-3xl xl:flex-row">
-          <div className="flex w-9/10 justify-end gap-4 xl:w-3/10">
-            <p className="w-5/10 text-right">Created at: </p>
-            <p className="w-5/10 font-bold">{formattedDate}</p>
+          <div className="flex w-9/10 justify-between gap-4 xl:w-3/10">
+            <p className="w-5/10 text-center xl:text-left">Created at: </p>
+            <p className="w-5/10 font-bold">
+              {new Date(order.createdAt).toLocaleString(undefined, {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </p>
           </div>
           <button
             onClick={handleOpenStatus}
@@ -114,12 +110,12 @@ const Order = ({ order }: OrderProps) => {
           >
             Order Status
           </button>
-          <div className="flex w-9/10 justify-end gap-4 xl:w-3/10">
-            <p className="w-5/10 text-right">Time to complete:</p>
+          <div className="flex w-9/10 justify-between gap-4 xl:w-3/10">
+            <p className="w-5/10 text-center xl:text-left">Time to complete:</p>
             {timeLeft > 0 ? (
               <p className="w-5/10 font-bold">{formatTimeLeft(timeLeft)}</p>
             ) : (
-              <p className="font-bold">Completed</p>
+              <p className="w-5/10 font-bold">Completed</p>
             )}
           </div>
         </div>
@@ -127,7 +123,7 @@ const Order = ({ order }: OrderProps) => {
         <ul className="mt-4 flex flex-col gap-4">
           {order.dishes.map((dish) => (
             <li
-              key={dish.dishId} // Додано унікальний ключ
+              key={dish.dishId}
               className="flex gap-2 rounded-2xl bg-[#FBE7BB] p-4"
             >
               <div className="relative h-48 w-48">
@@ -169,7 +165,7 @@ const Order = ({ order }: OrderProps) => {
                       onClick={() =>
                         handleOpenRestaurantComment(
                           dish.restaurantId,
-                          dish.restaurant
+                          dish.restaurant,
                         )
                       }
                       className="cursor-pointer rounded-2xl bg-[#F6DA9E] px-2 transition-colors duration-300 ease-in-out hover:bg-[#EAC984] md:px-4"
@@ -193,6 +189,40 @@ const Order = ({ order }: OrderProps) => {
             </li>
           ))}
         </ul>
+        <div className="flex min-h-50 flex-col gap-0 lg:flex-row lg:gap-4">
+          <div className="mt-4 flex w-full flex-col rounded-2xl bg-[#FBE7BB] p-4 lg:w-5/10 xl:w-7/10">
+            {order?.comment?.length ? (
+              <>
+                <p>Comment:</p>
+                <p className="text-lg leading-[1] font-bold md:text-xl lg:text-3xl">
+                  {order.comment}
+                </p>
+              </>
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <p className="text-center text-lg font-bold md:text-xl lg:text-3xl">
+                  No comment
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 flex w-full flex-col justify-between rounded-2xl bg-[#FBE7BB] p-4 text-xl md:text-3xl lg:w-5/10 xl:w-3/10">
+            <div className="flex gap-0 md:gap-8">
+              <p className="w-2/3 md:w-1/2">Total price</p>
+              <p className="w-1/3 font-bold md:w-1/2">
+                {order.totalAmount} UAN
+              </p>
+            </div>
+            <div className="flex gap-0 md:gap-8">
+              <p className="w-2/3 md:w-1/2">Total quantity</p>
+              <p className="w-1/3 font-bold md:w-1/2">{order.totalQuantity}</p>
+            </div>
+            <div className="flex gap-0 md:gap-8">
+              <p className="w-2/3 md:w-1/2">Payment</p>
+              <p className="w-1/3 font-bold md:w-1/2">{order.paymentMethod}</p>
+            </div>
+          </div>
+        </div>
       </li>
 
       {windowStatus && (
@@ -201,10 +231,9 @@ const Order = ({ order }: OrderProps) => {
           isClosing={isClosing}
           windowWidth={"w-full md:w-9/10 lg:w-8/10 xl:w-7/10"}
           windowHeight={""}
-          ChildComponent={<Status handleClose={handleClose} />}
+          ChildComponent={<Status handleClose={handleClose} selectedTime={order.selectedTime} createdAt={order.createdAt} />}
         />
       )}
-      {/* Модальні вікна для коментарів */}
       {windowDishComment && selectedDishId && (
         <Window
           handleClose={handleClose}
@@ -214,7 +243,7 @@ const Order = ({ order }: OrderProps) => {
           ChildComponent={
             <Comment
               handleClose={handleClose}
-              title={selectedTitle} // Передаємо назву страви
+              title={selectedTitle}
               id={selectedDishId}
               type="dish"
             />
@@ -230,7 +259,7 @@ const Order = ({ order }: OrderProps) => {
           ChildComponent={
             <Comment
               handleClose={handleClose}
-              title={selectedTitle} // Передаємо назву ресторану
+              title={selectedTitle}
               id={selectedRestaurantId}
               type="restaurant"
             />

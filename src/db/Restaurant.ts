@@ -10,9 +10,9 @@ import {
   getDocs,
   getDoc,
 } from "firebase/firestore";
-import type { Restaurant1 } from "@/types/restaurant.types";
+import type { RestaurantType } from "@/types/restaurant.types";
 
-export const addRestaurantToFirestore = async (restaurant: Restaurant1) => {
+export const addRestaurantToFirestore = async (restaurant: RestaurantType) => {
   try {
     const docRef = await addDoc(collection(db, "restaurants"), restaurant);
     console.log("Document written with ID: ", docRef.id);
@@ -22,7 +22,7 @@ export const addRestaurantToFirestore = async (restaurant: Restaurant1) => {
 };
 
 export const addAllRestaurantsToFirestore = async (
-  restaurants: Restaurant1[],
+  restaurants: RestaurantType[],
 ) => {
   for (const restaurant of restaurants) {
     await addRestaurantToFirestore(restaurant);
@@ -30,14 +30,14 @@ export const addAllRestaurantsToFirestore = async (
 };
 
 export const getAllRestaurantsFromFirestore = async (): Promise<
-  Restaurant1[] | []
+  RestaurantType[] | []
 > => {
   try {
     const querySnapshot = await getDocs(collection(db, "restaurants"));
-    const restaurants: Restaurant1[] = [];
+    const restaurants: RestaurantType[] = [];
 
     querySnapshot.forEach((doc) => {
-      restaurants.push({ id: doc.id, ...doc.data() } as Restaurant1);
+      restaurants.push({ id: doc.id, ...doc.data() } as RestaurantType);
     });
 
     return restaurants;
@@ -49,13 +49,13 @@ export const getAllRestaurantsFromFirestore = async (): Promise<
 
 export const getRestaurantById = async (
   id: string,
-): Promise<Restaurant1 | null> => {
+): Promise<RestaurantType | null> => {
   try {
     const docRef = doc(db, "restaurants", id);
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
-      return { id: docSnapshot.id, ...docSnapshot.data() } as Restaurant1;
+      return { id: docSnapshot.id, ...docSnapshot.data() } as RestaurantType;
     } else {
       console.log("No such document!");
       return null;
@@ -68,14 +68,14 @@ export const getRestaurantById = async (
 
 export const getRestaurantByName = async (
   name: string,
-): Promise<Restaurant1 | null> => {
+): Promise<RestaurantType | null> => {
   try {
     const q = query(collection(db, "restaurants"), where("name", "==", name));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0];
-      return { id: doc.id, ...doc.data() } as Restaurant1;
+      return { id: doc.id, ...doc.data() } as RestaurantType;
     } else {
       console.log("No such restaurant found!");
       return null;

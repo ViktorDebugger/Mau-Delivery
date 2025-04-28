@@ -1,19 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-
 import { useState, useEffect } from "react";
-
 import { useCart } from "@/context/CartContext";
-import type { Dish } from "@/types/dish.types";
-import type { CartItem } from "@/types/cart.types";
+import type { DishType } from "@/types/dish.types";
+import type { CartItemType } from "@/types/cart.types";
 import { useAuth } from "@/context/AuthContext";
 import Window from "@/components/Windows/Window";
 import Allergens from "@/components/Windows/Allergens";
-import { Restaurant } from "@/types/restaurant.types";
+import { RestaurantType } from "@/types/restaurant.types";
 
 interface CardDishProps {
-  dish: Dish;
-  restaurant: Restaurant;
+  dish: DishType;
+  restaurant: RestaurantType;
 }
 
 const CardDishMenu = ({ dish, restaurant }: CardDishProps) => {
@@ -21,7 +19,6 @@ const CardDishMenu = ({ dish, restaurant }: CardDishProps) => {
   const userAllergens = userData?.allergens || [];
   const [windowAllergens, setWindowAllergens] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState<boolean>(false);
-
   const { cart, setCart } = useCart();
   const [isItemInCart, setIsItemInCart] = useState<boolean>(false);
 
@@ -49,7 +46,7 @@ const CardDishMenu = ({ dish, restaurant }: CardDishProps) => {
   const addToCart = () => {
     if (!dish) return;
     try {
-      const newItem: CartItem = {
+      const newItem: CartItemType = {
         dishId: dish.id,
         restaurant: dish.restaurant,
         restaurantId: restaurant?.id || "",
@@ -124,7 +121,7 @@ const CardDishMenu = ({ dish, restaurant }: CardDishProps) => {
               isItemInCart ? handleDeleteFromCart() : handleAddToCart()
             }
             disabled={!user}
-            className={`cursor-pointer w-full rounded-full mt-2 text-2xl px-4 pt-4 pb-3 transition-colors duration-300 ease-in-out disabled:cursor-auto disabled:bg-[#9CA3AF] ${
+            className={`mt-2 w-full cursor-pointer rounded-full px-2 pt-5 pb-2 text-2xl transition-colors duration-300 ease-in-out disabled:cursor-auto disabled:bg-[#9CA3AF] ${
               isItemInCart
                 ? "bg-[#EF4444] hover:bg-[#DC2626]"
                 : "bg-[#FAB735] hover:bg-[#F2A30F]"

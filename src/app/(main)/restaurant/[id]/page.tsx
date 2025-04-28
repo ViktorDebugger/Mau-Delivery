@@ -1,4 +1,4 @@
-import RestaurantClientComponent from "./RestaurantClientComponent";
+import RestaurantClientComponent from "./Restaurant";
 
 export const metadata = () => {
   return {
@@ -6,6 +6,8 @@ export const metadata = () => {
   };
 };
 
-export default function RestaurantPage() {
+const RestaurantPage = () => {
   return <RestaurantClientComponent />;
-}
+};
+
+export default RestaurantPage;

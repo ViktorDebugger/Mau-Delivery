@@ -2,7 +2,7 @@ import Preview from "@/components/Home/Preview";
 import Top from "@/components/Home/Top";
 import Team from "@/components/Home/Team";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className="mt-[100px]">
       <Preview />
@@ -10,4 +10,6 @@ export default function Home() {
       <Team />
     </div>
   );
-}
+};
+
+export default Home;

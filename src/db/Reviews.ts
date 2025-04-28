@@ -1,10 +1,9 @@
-import { addDoc, collection, setDoc, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/db/firebase";
-import type { ReviewDish } from "@/types/dish.types";
-import type { ReviewRestaurant } from "@/types/restaurant.types";
+import type { ReviewDishType } from "@/types/dish.types";
+import type { ReviewRestaurantType } from "@/types/restaurant.types";
 
-// Функція для збереження відгуку про страву
-export const saveDishReview = async (review: ReviewDish): Promise<void> => {
+export const saveDishReview = async (review: ReviewDishType): Promise<void> => {
   try {
     const reviewsRef = collection(db, "dishReviews");
     await addDoc(reviewsRef, review);
@@ -15,9 +14,8 @@ export const saveDishReview = async (review: ReviewDish): Promise<void> => {
   }
 };
 
-// Функція для збереження відгуку про ресторан
 export const saveRestaurantReview = async (
-  review: ReviewRestaurant,
+  review: ReviewRestaurantType,
 ): Promise<void> => {
   try {
     const reviewsRef = collection(db, "restaurantReviews");
@@ -29,16 +27,15 @@ export const saveRestaurantReview = async (
   }
 };
 
-// Функція для отримання коментарів про страву
-export const getDishReviews = async (dishId: string): Promise<ReviewDish[]> => {
+export const getDishReviews = async (dishId: string): Promise<ReviewDishType[]> => {
   try {
     const reviewsRef = collection(db, "dishReviews");
     const q = query(reviewsRef, where("dishId", "==", dishId));
     const querySnapshot = await getDocs(q);
 
-    const reviews: ReviewDish[] = [];
+    const reviews: ReviewDishType[] = [];
     querySnapshot.forEach((doc) => {
-      reviews.push(doc.data() as ReviewDish);
+      reviews.push(doc.data() as ReviewDishType);
     });
 
     return reviews;
@@ -48,18 +45,17 @@ export const getDishReviews = async (dishId: string): Promise<ReviewDish[]> => {
   }
 };
 
-// Функція для отримання коментарів про ресторан
 export const getRestaurantReviews = async (
   restaurantId: string,
-): Promise<ReviewRestaurant[]> => {
+): Promise<ReviewRestaurantType[]> => {
   try {
     const reviewsRef = collection(db, "restaurantReviews");
     const q = query(reviewsRef, where("restaurantId", "==", restaurantId));
     const querySnapshot = await getDocs(q);
 
-    const reviews: ReviewRestaurant[] = [];
+    const reviews: ReviewRestaurantType[] = [];
     querySnapshot.forEach((doc) => {
-      reviews.push(doc.data() as ReviewRestaurant);
+      reviews.push(doc.data() as ReviewRestaurantType);
     });
 
     return reviews;
@@ -69,10 +65,9 @@ export const getRestaurantReviews = async (
   }
 };
 
-// Функція для отримання коментарів користувача
 export const getUserReviews = async (
   userId: string,
-): Promise<(ReviewDish | ReviewRestaurant)[]> => {
+): Promise<(ReviewDishType | ReviewRestaurantType)[]> => {
   try {
     const dishReviewsRef = collection(db, "dishReviews");
     const restaurantReviewsRef = collection(db, "restaurantReviews");
@@ -88,14 +83,14 @@ export const getUserReviews = async (
       getDocs(restaurantQuery),
     ]);
 
-    const reviews: (ReviewDish | ReviewRestaurant)[] = [];
+    const reviews: (ReviewDishType | ReviewRestaurantType)[] = [];
 
     dishSnapshot.forEach((doc) => {
-      reviews.push(doc.data() as ReviewDish);
+      reviews.push(doc.data() as ReviewDishType);
     });
 
     restaurantSnapshot.forEach((doc) => {
-      reviews.push(doc.data() as ReviewRestaurant);
+      reviews.push(doc.data() as ReviewRestaurantType);
     });
 
     return reviews;

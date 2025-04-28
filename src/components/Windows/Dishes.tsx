@@ -1,30 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
-
 import { useState, useEffect, useMemo } from "react";
 import { X } from "lucide-react";
 import { MoonLoader } from "react-spinners";
-
 import { getAllDishesFromFirestore } from "@/db/Dish";
-
 import SearchInput from "../Other/SearchInput";
 import Filter from "../Menu/Filter";
 import type { FilterValues } from "../Menu/Filter";
-import type { Dish } from "@/types/dish.types";
+import type { DishType } from "@/types/dish.types";
 
 interface WindowDishesProps {
   handleClose: () => void;
 }
 
 const Dishes = ({ handleClose }: WindowDishesProps) => {
-  const [dishesData, setDishesData] = useState<Dish[]>([]);
+  const [dishesData, setDishesData] = useState<DishType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
-
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
   const [activeFilters, setActiveFilters] = useState<FilterValues>({
     minPrice: null,
     maxPrice: null,
@@ -48,8 +43,8 @@ const Dishes = ({ handleClose }: WindowDishesProps) => {
     setActiveFilters(filters);
   };
 
-  const filteredDishes: Dish[] = useMemo<Dish[]>(() => {
-    const results = dishesData.filter((dish: Dish) => {
+  const filteredDishes: DishType[] = useMemo<DishType[]>(() => {
+    const results = dishesData.filter((dish: DishType) => {
       const term = searchTerm.toLowerCase();
       const nameMatch = dish.name?.toLowerCase().includes(term);
 
@@ -108,7 +103,7 @@ const Dishes = ({ handleClose }: WindowDishesProps) => {
           Dishes not found
         </div>
       ) : (
-        <div className="custom-scrollbar-1 mt-2 max-h-[500px] overflow-y-auto lg:mt-8 lg:max-h-[520px]">
+        <div className="custom-scrollbar-1 mt-2 overflow-y-auto lg:mt-8 max-h-9/10 h-full">
           <ul className="mt-2 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {filteredDishes.map((dish) => (
               <li

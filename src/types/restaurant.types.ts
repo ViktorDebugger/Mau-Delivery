@@ -1,4 +1,4 @@
-export interface Restaurant {
+export interface RestaurantType {
   id?: string;
   name: string;
   image: string;
@@ -6,7 +6,7 @@ export interface Restaurant {
   rating: number;
 }
 
-export interface ReviewRestaurant {
+export interface ReviewRestaurantType {
   userId: string;
   restaurantId: string;
   restaurantName: string;
@@ -16,4 +16,5 @@ export interface ReviewRestaurant {
   avatar?: string;
   stars: number;
   type: "restaurant";
+  timestamp: string;
 }

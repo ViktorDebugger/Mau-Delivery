@@ -1,9 +1,11 @@
-import EditProfileClientComponent from "./EditProfileClientComponent";
+import EditProfile from "./EditProfile";
 
 export const metadata = {
   title: "Edit Profile",
 };
 
-export default function Page() {
-  return <EditProfileClientComponent />;
+const EditPage = () => {
+  return <EditProfile />;
 }
+
+export default EditPage;

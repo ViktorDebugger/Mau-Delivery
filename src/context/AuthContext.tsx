@@ -29,7 +29,7 @@ interface AuthContextInterface {
   changePassword: (
     currentPassword: string,
     newPassword: string,
-  ) => Promise<void>; // Додано новий метод
+  ) => Promise<void>;
 }
 
 const changePassword = async (currentPassword: string, newPassword: string) => {
@@ -119,14 +119,13 @@ const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null); // Додаткові дані з Firestore
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       const fetchUserData = async () => {
         setUser(user);
         if (user) {
-          // Завантаження додаткових даних користувача з Firestore
           const fetchedUserData = await getUserData(user.uid);
           setUserData(fetchedUserData);
         } else {

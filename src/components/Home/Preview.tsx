@@ -1,5 +1,6 @@
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
 import Quotes from "@/components/Decorations/Quotes";
 import delivery from "../../../public/images/bg-items/meow-delivery.png";
 import bgItem01 from "../../../public/images/bg-items/bg-item-1.png";
@@ -7,6 +8,18 @@ import bgItem02 from "../../../public/images/bg-items/bg-item-2.png";
 import bgItem08 from "../../../public/images/bg-items/bg-item-8.png";
 
 const Preview = () => {
+  const handleScroll = () => {
+    const topSection = document.getElementById("top-section");
+    if (topSection) {
+      const offset = -120;
+      const topPosition = topSection.getBoundingClientRect().top + window.scrollY + offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <section className="relative">
       <Image
@@ -14,7 +27,7 @@ const Preview = () => {
         src={bgItem02}
         alt=""
         width={375}
-        height={200}
+        height={375}
         data-aos="fade-down"
       />
       <Image
@@ -51,6 +64,7 @@ const Preview = () => {
           </div>
 
           <button
+            onClick={handleScroll}
             className="font-karantina mt-8 cursor-pointer rounded-full bg-[#F2680F] px-16 py-3 text-4xl transition-colors duration-300 ease-in-out hover:bg-[#F2570F] md:text-5xl"
             data-aos="fade-left"
           >

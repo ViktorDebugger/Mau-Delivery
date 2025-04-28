@@ -14,7 +14,7 @@ const SearchInput = ({ value, onChange, onSearch }: SearchInputProps) => {
   };
 
   return (
-    <div className="flex w-70 md:w-72 items-center rounded-4xl bg-[#FAB735] pl-3 md:pl-5">
+    <div className="flex w-70 items-center rounded-4xl bg-[#FAB735] pl-3 md:w-72 md:pl-5">
       <input
         type="text"
         value={value}

@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Quotes from "@/components/Decorations/Quotes";
@@ -8,11 +9,11 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
 
-const ResetPasswordClientComponent = () => {
-  const [email, setEmail] = useState("");
+const ResetPassword = () => {
+  const [email, setEmail] = useState<string>("");
   const { resetPassword } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleResetPassword = async () => {
     try {
@@ -20,14 +21,22 @@ const ResetPasswordClientComponent = () => {
 
       await resetPassword(email);
       toast.success("Password reset email sent!", {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       router.push("/sign-in");
     } catch (error) {
       toast.error("Failed to send password reset email!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Failed to send password reset email:", error);
     } finally {
@@ -94,4 +103,4 @@ const ResetPasswordClientComponent = () => {
   );
 };
 
-export default ResetPasswordClientComponent;
+export default ResetPassword;

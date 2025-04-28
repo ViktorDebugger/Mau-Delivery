@@ -1,15 +1,19 @@
 import Image from "next/image";
-
 import { X } from "lucide-react";
-
 import status from "../../../public/images/bg-items/status.png";
-import courier from "../../../public/images/icons/user.png";
+import { userIcon } from "@/types/user.types";
 
 interface WindowStatusProps {
   handleClose: () => void;
+  selectedTime: string;
+  createdAt: string;
 }
 
-const Status = ({ handleClose }: WindowStatusProps) => {
+const Status = ({
+  handleClose,
+  selectedTime,
+  createdAt,
+}: WindowStatusProps) => {
   const strings = [
     "accepted",
     "cooking",
@@ -17,6 +21,24 @@ const Status = ({ handleClose }: WindowStatusProps) => {
     "on the way",
     "delivered",
   ];
+
+  const relation = Math.max(
+    0,
+    Math.min(
+      100,
+      Number(
+        (
+          100 -
+          ((new Date(selectedTime).getTime() - Date.now()) /
+            (new Date(selectedTime).getTime() -
+              new Date(createdAt).getTime())) *
+            100
+        ).toFixed(0),
+      ),
+    ),
+  );
+
+  const currentStage = Math.floor(relation / 20) - 1;
 
   return (
     <div className="flex flex-col items-center">
@@ -28,14 +50,14 @@ const Status = ({ handleClose }: WindowStatusProps) => {
       </button>
       <h1 className="font-karantina text-center text-6xl md:text-8xl">
         Order Status
-      </h1>{" "}
+      </h1>
       <div className="relative mt-10 h-2 w-9/10 rounded-full bg-[#F2680F] md:h-4">
         <ul className="flex justify-between text-3xl">
           {strings.map((str, index) => (
             <li key={index} className="relative -top-1 z-10 md:-top-2">
               <div
                 className={`h-4 w-4 rounded-full md:h-8 md:w-8 ${
-                  index < 3 ? "bg-[#EF4444]" : "bg-[#F2680F]"
+                  index <= currentStage ? "bg-[#F20E0E]" : "bg-[#F2680F]"
                 }`}
               ></div>
               <p className="absolute -right-28 w-64 text-center text-sm sm:text-lg md:text-xl lg:text-2xl">
@@ -49,7 +71,7 @@ const Status = ({ handleClose }: WindowStatusProps) => {
         <div className="flex w-full items-center gap-4 rounded-4xl bg-[#F2680F] p-4 md:w-4/10">
           <div className="w-2/10 xl:w-3/10">
             <Image
-              src={courier}
+              src={userIcon}
               alt=""
               width={100}
               height={100}
@@ -62,12 +84,7 @@ const Status = ({ handleClose }: WindowStatusProps) => {
           </div>
         </div>
         <div className="mt-4 flex w-full justify-center md:mt-0 md:w-2/10">
-          <Image
-            src={status}
-            alt="User Profile"
-            width={200}
-            height={250}
-          />
+          <Image src={status} alt="User Profile" width={200} height={250} />
         </div>
       </div>
     </div>

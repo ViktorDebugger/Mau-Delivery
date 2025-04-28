@@ -2,53 +2,63 @@
 
 import Image from "next/image";
 import { MoonLoader } from "react-spinners";
-
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
-import type { ReviewDish } from "@/types/dish.types";
-import type { ReviewRestaurant } from "@/types/restaurant.types";
+import type { ReviewDishType } from "@/types/dish.types";
+import type { ReviewRestaurantType } from "@/types/restaurant.types";
 import { getDishReviews, getRestaurantReviews } from "@/db/Reviews";
+import { userIcon } from "@/types/user.types";
+import { getUserAvatar } from "@/db/User";
 import "swiper/css";
-import { div } from "motion/react-client";
 
 interface ReviewsSliderProps {
-  dishId?: string; // ID страви
-  restaurantId?: string; // ID ресторану
+  dishId?: string;
+  restaurantId?: string;
 }
 
-export default function ReviewsSlider({
-  dishId,
-  restaurantId,
-}: ReviewsSliderProps) {
+const ReviewsSlider = ({ dishId, restaurantId }: ReviewsSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
-  const [reviews, setReviews] = useState<ReviewDish[] | ReviewRestaurant[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Стан для лоадера
-  const [notFound, setNotFound] = useState<boolean>(false); // Стан для notFound
+  const [reviews, setReviews] = useState<
+    ReviewDishType[] | ReviewRestaurantType[]
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReviews = async () => {
-      setLoading(true); // Початок завантаження
-      setNotFound(false); // Скидання стану notFound
+      setLoading(true);
+      setNotFound(false);
 
       try {
+        let fetchedReviews:ReviewDishType[] | ReviewRestaurantType[] = [];
         if (dishId) {
-          // Завантаження відгуків для страви
-          const dishReviews = await getDishReviews(dishId);
-          if (dishReviews.length === 0) setNotFound(true); // Якщо відгуків немає
-          setReviews(dishReviews);
+          fetchedReviews = await getDishReviews(dishId);
         } else if (restaurantId) {
-          // Завантаження відгуків для ресторану
-          const restaurantReviews = await getRestaurantReviews(restaurantId);
-          if (restaurantReviews.length === 0) setNotFound(true); // Якщо відгуків немає
-          setReviews(restaurantReviews);
+          fetchedReviews = await getRestaurantReviews(restaurantId);
         }
+        if (fetchedReviews.length === 0) {
+          setNotFound(true);
+          return;
+        }
+
+        const reviewsWithAvatars = await Promise.all(
+          fetchedReviews.map(async (review) => {
+            const avatar = await getUserAvatar(review.userId);
+            return {
+              ...review,
+              avatar: avatar || userIcon,
+          }   })
+        ) as ReviewDishType[] | ReviewRestaurantType[];
+
+        setReviews(reviewsWithAvatars);
+
       } catch (error) {
         console.error("Error fetching reviews:", error);
-        setNotFound(true); // Помилка також вважається відсутністю даних
+        setNotFound(true);
       } finally {
-        setLoading(false); // Завершення завантаження
+        setLoading(false);
       }
     };
 
@@ -104,7 +114,7 @@ export default function ReviewsSlider({
                     <div className="flex items-center gap-4">
                       <div className="relative h-10 w-10 md:h-20 md:w-20">
                         <Image
-                          src={`${review.avatar ? review.avatar : "/images/icons/user.png"}`}
+                          src={`${review.avatar ? review.avatar : userIcon}`}
                           alt="User Avatar"
                           fill
                           sizes="80px"
@@ -144,4 +154,6 @@ export default function ReviewsSlider({
       )}
     </>
   );
-}
+};
+
+export default ReviewsSlider;

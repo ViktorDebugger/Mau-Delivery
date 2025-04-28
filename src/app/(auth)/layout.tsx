@@ -2,15 +2,9 @@
 
 import VerticalTrace from "@/components/Decorations/VerticalTrace";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen items-center justify-center">
-     
       <div className="absolute top-0 right-20 bottom-0 z-0 hidden overflow-hidden sm:block">
         <VerticalTrace />
       </div>
@@ -21,4 +15,6 @@ export default function AuthLayout({
       {children}
     </div>
   );
-}
+};
+
+export default AuthLayout;

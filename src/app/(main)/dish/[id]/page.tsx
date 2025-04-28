@@ -1,4 +1,4 @@
-import DishClientComponent from "./DishClientComponent";
+import Dish from "./Dish";
 
 export const metadata = () => {
   return {
@@ -6,6 +6,8 @@ export const metadata = () => {
   };
 };
 
-export default function DishPage() {
-  return <DishClientComponent />;
-}
+const DishPage = () => {
+  return <Dish />;
+};
+
+export default DishPage;

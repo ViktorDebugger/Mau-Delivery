@@ -1,13 +1,12 @@
 import Head from "next/head";
 import type { Metadata } from "next";
 import { Karantina, Katibeh } from "next/font/google";
-
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
-import ClientWrapper from "@/context/ClientWrapper";
+import { OrdersProvider } from "@/context/OrderContext";
+import AnimationWrapper from "@/context/AnimationWrapper";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const karantina = Karantina({
@@ -27,11 +26,7 @@ export const metadata: Metadata = {
   description: "Delivery service",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <Head>
@@ -41,17 +36,22 @@ export default function RootLayout({
         className={`${karantina.variable} ${katibeh.variable} font-katibeh w-full bg-[#FBE7BB]`}
       >
         <AuthProvider>
-          <CartProvider>
-              <ClientWrapper>{children}</ClientWrapper>
+          <OrdersProvider>
+            <CartProvider>
+              <AnimationWrapper>{children}</AnimationWrapper>
               <ToastContainer
                 position="top-center"
                 hideProgressBar={true}
                 autoClose={3000}
                 closeOnClick
+                toastClassName="custom-toast"
               />
-          </CartProvider>
+            </CartProvider>
+          </OrdersProvider>
         </AuthProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

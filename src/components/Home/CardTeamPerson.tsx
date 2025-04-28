@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import type { TeamPerson } from "@/components/Home/Team";
 
 interface Props {

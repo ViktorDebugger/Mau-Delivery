@@ -2,41 +2,41 @@
 
 import Image from "next/image";
 import { MoonLoader } from "react-spinners";
-
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
-import type { ReviewDish } from "@/types/dish.types";
-import type { ReviewRestaurant } from "@/types/restaurant.types";
-import { getUserReviews } from "@/db/Reviews"; // Функція для отримання відгуків користувача
+import type { ReviewDishType } from "@/types/dish.types";
+import type { ReviewRestaurantType } from "@/types/restaurant.types";
+import { getUserReviews } from "@/db/Reviews";
 import "swiper/css";
 
 interface UserReviewsSliderProps {
-  userId: string; // ID користувача
+  userId: string;
 }
 
-export default function UserReviewsSlider({ userId }: UserReviewsSliderProps) {
+const UserReviewsSlider = ({ userId }: UserReviewsSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
-  const [reviews, setReviews] = useState<(ReviewDish | ReviewRestaurant)[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Стан для лоадера
-  const [notFound, setNotFound] = useState<boolean>(false); // Стан для notFound
+  const [reviews, setReviews] = useState<
+    (ReviewDishType | ReviewRestaurantType)[]
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReviews = async () => {
-      setLoading(true); // Початок завантаження
-      setNotFound(false); // Скидання стану notFound
+      setLoading(true);
+      setNotFound(false);
 
       try {
-        // Завантаження відгуків для користувача
         const userReviews = await getUserReviews(userId);
-        if (userReviews.length === 0) setNotFound(true); // Якщо відгуків немає
+        if (userReviews.length === 0) setNotFound(true);
         setReviews(userReviews);
       } catch (error) {
         console.error("Error fetching user reviews:", error);
-        setNotFound(true); // Помилка також вважається відсутністю даних
+        setNotFound(true);
       } finally {
-        setLoading(false); // Завершення завантаження
+        setLoading(false);
       }
     };
 
@@ -51,12 +51,12 @@ export default function UserReviewsSlider({ userId }: UserReviewsSliderProps) {
         </div>
       ) : notFound ? (
         <div className="flex w-full items-center justify-center">
-          <div className="mt-6 flex h-40 w-full items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
+          <div className="mt-6 flex h-40 w-4/10 items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
             Reviews not found
           </div>
         </div>
       ) : (
-        <div className="relative mx-auto w-full max-w-3xl px-4 md:px-16">
+        <div className="relative mx-auto w-8/10 lg:w-full max-w-3xl px-4 md:px-16">
           {reviews.length > 1 && (
             <>
               <button
@@ -109,11 +109,11 @@ export default function UserReviewsSlider({ userId }: UserReviewsSliderProps) {
                     </div>
 
                     <div className="flex">
-                      <ul className="flex gap-1 rounded-4xl bg-[#FFFFFF] px-2">
+                      <ul className="flex gap-1 rounded-4xl bg-[#FFFFFF] px-1 md:px-2">
                         {[...Array(5)].map((_, index) => (
                           <li
                             key={index}
-                            className={`text-2xl ${
+                            className={`text-lg md:text-2xl ${
                               index < Math.floor(review.stars)
                                 ? "text-[#FAB735]"
                                 : "text-[#D1D5DB]"
@@ -137,4 +137,6 @@ export default function UserReviewsSlider({ userId }: UserReviewsSliderProps) {
       )}
     </>
   );
-}
+};
+
+export default UserReviewsSlider;

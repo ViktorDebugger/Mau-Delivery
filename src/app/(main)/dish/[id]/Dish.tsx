@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-
 import { useState, useEffect } from "react";
 import { MoonLoader } from "react-spinners";
 import Window from "@/components/Windows/Window";
@@ -16,25 +15,24 @@ import ReviewsSlider from "@/components/Other/ReviewsSlider";
 import HorizontalTrace from "@/components/Decorations/HorizontalTrace";
 import bgItem05 from "../../../../../public/images/bg-items/bg-item-5.png";
 import { getDishById } from "@/db/Dish";
-import type { Dish } from "@/types/dish.types";
-import type { CartItem } from "@/types/cart.types";
-import { Restaurant } from "@/types/restaurant.types";
+import type { DishType } from "@/types/dish.types";
+import type { CartItemType } from "@/types/cart.types";
+import { RestaurantType } from "@/types/restaurant.types";
 import { getRestaurantByName } from "@/db/Restaurant";
 
-export default function DishClientComponent() {
+const Dish = () => {
   const { cart, setCart } = useCart();
   const { user, userData } = useAuth();
-  const userAllergens = userData?.allergens || [];
-
   const [isItemInCart, setIsItemInCart] = useState<boolean>(false);
-  const [dish, setDish] = useState<Dish | null>(null);
-  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [dish, setDish] = useState<DishType | null>(null);
+  const [restaurant, setRestaurant] = useState<RestaurantType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [windowAllergens, setWindowAllergens] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<boolean>(false);
-  const [intersectingAllergens, setIntersectingAllergens] = useState<string[]>([]);
-
+  const [intersectingAllergens, setIntersectingAllergens] = useState<string[]>(
+    [],
+  );
   const params = useParams();
   const id = params.id as string;
 
@@ -58,8 +56,12 @@ export default function DishClientComponent() {
       setDish(fetchedDish);
 
       if (fetchedDish) {
-        setIntersectingAllergens((fetchedDish.allergens || []).filter((allergen: string) =>
-          userAllergens.includes(allergen)));
+        const allergens = userData?.allergens || [];
+        setIntersectingAllergens(
+          (fetchedDish.allergens || []).filter((allergen: string) =>
+            allergens.includes(allergen),
+          ),
+        );
         const fetchedRestaurant = await getRestaurantByName(
           fetchedDish.restaurant,
         );
@@ -71,7 +73,8 @@ export default function DishClientComponent() {
 
     fetchDish();
     setNotFound(!!dish);
-  }, [id]);
+  }, [id, userData]);
+
   useEffect(() => {
     setIsItemInCart(cart.some((item) => item.dishId === dish?.id));
   }, [cart, dish?.id]);
@@ -79,7 +82,7 @@ export default function DishClientComponent() {
   const addToCart = () => {
     if (!dish) return;
     try {
-      const newItem: CartItem = {
+      const newItem: CartItemType = {
         dishId: dish.id,
         restaurantId: restaurant?.id || "",
         restaurant: dish.restaurant,
@@ -179,7 +182,7 @@ export default function DishClientComponent() {
               <div className="flex flex-col" data-aos="fade-right">
                 <div className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
                   <Image
-                    className="relative top-1/2 left-0 z-10 translate-y-1 rounded-4xl border-4 border-[#F2680F] object-cover transition-transform duration-300"
+                    className="relative top-1/2 left-0 z-10 translate-y-1 rounded-4xl border-4 border-[#F2680F] bg-[#D1D5DB] object-cover transition-transform duration-300"
                     src={dish!.image}
                     alt=""
                     fill
@@ -256,4 +259,6 @@ export default function DishClientComponent() {
       )}
     </>
   );
-}
+};
+
+export default Dish;

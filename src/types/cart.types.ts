@@ -1,4 +1,4 @@
-export interface CartItem {
+export interface CartItemType {
   dishId: string;
   quantity: number;
   price: number;
@@ -8,11 +8,11 @@ export interface CartItem {
   restaurantId: string;
 }
 
-export interface Order {
+export interface OrderType {
   orderId: string;
   totalAmount: number;
   totalQuantity: number;
-  paymentMethod: "cash" | "card";
+  paymentMethod: "Cash" | "Card";
   selectedTime: string;
   createdAt: string;
 

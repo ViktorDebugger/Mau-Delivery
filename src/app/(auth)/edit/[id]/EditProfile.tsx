@@ -11,25 +11,22 @@ import Link from "next/link";
 import Quotes from "@/components/Decorations/Quotes";
 import { uploadUserImageToCloudinary } from "@/db/Cloundinary";
 import { useAuth } from "@/context/AuthContext";
+import { userIcon } from "@/types/user.types";
 
-export default function EditProfileClientComponent() {
+const EditProfile = () => {
   const { id } = useParams();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [allergensInput, setAllergensInput] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
-
   const { user, updateEmail } = useAuth();
-
-  const iconUser = "/images/icons/user.png";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -102,8 +99,12 @@ export default function EditProfileClientComponent() {
 
       if (!isValidEmail(email)) {
         toast.error("Invalid email format!", {
-          className: "toast-error",
+          className: "toast-error custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+          closeOnClick: true,
           icon: false,
+          position: "top-center",
         });
         return;
       }
@@ -111,14 +112,22 @@ export default function EditProfileClientComponent() {
       await updateEmail(email);
 
       toast.success("Profile updated successfully!", {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       router.push(`/profile/${id}`);
     } catch (error) {
       toast.error("Failed to update profile!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Failed to update profile:", error);
     } finally {
@@ -229,7 +238,7 @@ export default function EditProfileClientComponent() {
                     <label
                       className={`text-opacity-10 hover:text-opacity-90 relative h-40 w-40 cursor-pointer rounded-2xl bg-cover bg-center text-black opacity-70 transition-opacity duration-300 ease-in-out hover:opacity-90 focus:outline-none`}
                       style={{
-                        backgroundImage: `url(${backgroundImage || iconUser})`,
+                        backgroundImage: `url(${backgroundImage || userIcon})`,
                       }}
                     >
                       <input
@@ -237,6 +246,7 @@ export default function EditProfileClientComponent() {
                         accept="image/*"
                         onChange={handleImageChange}
                         ref={fileInputRef}
+                        className="bg-[#D1D5DB]"
                       />
                       {!backgroundImage && (
                         <div className="pointer-events-none absolute top-15 left-16 z-10 cursor-pointer rounded-full bg-[#374151]/50 p-1 transition-colors hover:bg-[#374151]/70">
@@ -268,4 +278,6 @@ export default function EditProfileClientComponent() {
       )}
     </>
   );
-}
+};
+
+export default EditProfile;

@@ -2,19 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import { useState } from "react";
 import { Menu, X, ShoppingBasket } from "lucide-react";
-
 import Cart from "../Menu/Cart";
 import Window from "../Windows/Window";
 import Dishes from "../Windows/Dishes";
 import Restaurants from "../Windows/Restaurants";
 import Order from "../Windows/Order";
-import UploadDishesButton from "../Admin/UploadDishesButton";
-import UploadRestaurantsButton from "../Admin/UploadRestaurantsButton";
 import logo from "../../../public/images/logo.png";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 const Header = () => {
   const [windowDishes, setWindowDishes] = useState<boolean>(false);
@@ -22,7 +19,7 @@ const Header = () => {
   const [windowOrder, setWindowOrder] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-
+  const { cart } = useCart();
   const { user } = useAuth();
 
   const handleClose = () => {
@@ -72,12 +69,6 @@ const Header = () => {
 
           <nav className="ml-auto hidden md:block">
             <ul className="flex items-center gap-2 text-3xl lg:text-4xl">
-              {/* <li>
-                <UploadDishesButton />
-              </li> */}
-              {/* <li>
-                <UploadRestaurantsButton />
-              </li> */}
               <li>{user && <Cart />}</li>
               <li>
                 <button
@@ -229,13 +220,27 @@ const Header = () => {
         />
       )}
       {windowOrder && (
-        <Window
-          handleClose={handleClose}
-          isClosing={isClosing}
-          windowWidth={"w-full lg:w-8/10"}
-          windowHeight={"h-19/20 lg:h-9/10"}
-          ChildComponent={<Order handleClose={handleClose} />}
-        />
+        <>
+          {cart!.length !== 0 ? (
+            <Window
+              handleClose={handleClose}
+              isClosing={isClosing}
+              windowWidth={"w-full lg:w-8/10"}
+              windowHeight={"h-19/20 lg:h-9/10"}
+              ChildComponent={<Order handleClose={handleClose} />}
+            />
+          ) : (
+            <Window
+              handleClose={handleClose}
+              isClosing={isClosing}
+              windowWidth={"w-5/10"}
+              windowHeight={"h-3/10"}
+              ChildComponent={<div className="flex w-full h-full justify-center items-center">
+                <p className="text-4xl">None</p>
+              </div>}
+            />
+          )}
+        </>
       )}
     </>
   );

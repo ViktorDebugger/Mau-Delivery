@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 
 interface CommentProps {
   handleClose: () => void;
-  title: string; // Заголовок для компонента
-  id: string; // ID страви або ресторану
-  type: "dish" | "restaurant"; // Тип: страва або ресторан
+  title: string;
+  id: string;
+  type: "dish" | "restaurant";
 }
 
 const Comment = ({ handleClose, title, id, type }: CommentProps) => {
@@ -17,47 +17,79 @@ const Comment = ({ handleClose, title, id, type }: CommentProps) => {
   const [comment, setComment] = useState<string>("");
 
   const handleSubmit = async () => {
+    if (stars === 0) {
+      toast.error("Please select a rating!", {
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
+        icon: false,
+        position: "top-center",
+      });
+      return;
+    }
+    if (comment.length < 10) {
+      toast.error("Comment is too short!", {
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
+        icon: false,
+        position: "top-center",
+      });
+      return;
+    }
     try {
       if (type === "dish") {
-        // Збереження відгуку про страву
         await saveDishReview({
-          userId: user!.uid, // Замініть на реальний userId
+          userId: user!.uid,
           dishId: id,
           text: comment,
           type: "dish",
           stars,
           dishName: title,
           username: `${userData?.firstName} ${userData?.lastName}`,
-          avatar: userData?.avatar,
-          rating: 0
+          rating: 0,
+          timestamp: new Date().toISOString(),
         });
         toast.success("Dish review saved successfully!", {
-          className: "toast-success",
-          icon: false
+          className: "toast-success custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+          closeOnClick: true,
+          icon: false,
+          position: "top-center",
         });
       } else if (type === "restaurant") {
-        // Збереження відгуку про ресторан
         await saveRestaurantReview({
-          userId: user!.uid, // Замініть на реальний userId
+          userId: user!.uid,
           restaurantId: id,
-          restaurantName: title, // Використовуємо title як назву ресторану
+          restaurantName: title,
           text: comment,
-          type:"restaurant",
+          type: "restaurant",
           stars,
           username: `${userData?.firstName} ${userData?.lastName}`,
-          avatar: userData?.avatar,
-          rating: 0
+          rating: 0,
+          timestamp: new Date().toISOString(),
         });
         toast.success("Restaurant review saved successfully!", {
-          className: "toast-success",
-          icon: false
+          className: "toast-success custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+          closeOnClick: true,
+          icon: false,
+          position: "top-center",
         });
       }
       handleClose();
     } catch (error) {
       toast.error("Error saving review!", {
-        className: "toast-error",
-        icon: false
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
+        icon: false,
+        position: "top-center",
       });
       console.error("Error saving review:", error);
     }

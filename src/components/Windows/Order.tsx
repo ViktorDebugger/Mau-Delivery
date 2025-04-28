@@ -1,25 +1,23 @@
 import Image from "next/image";
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
-
 import { useCart } from "@/context/CartContext";
 import { getUserData } from "@/db/User";
 import { saveOrder } from "@/db/Order";
+import { useOrders } from "@/context/OrderContext";
 
 interface WindowDishesProps {
   handleClose: () => void;
 }
 
 const Order = ({ handleClose }: WindowDishesProps) => {
+  const { addOrder } = useOrders();
   const { user } = useAuth();
   const { cart, setCart } = useCart();
-  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
-  const [selectTimeAuto, setSelectTimeAuto] = useState<boolean>(false);
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<"Cash" | "Card">("Cash");
 
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -27,10 +25,12 @@ const Order = ({ handleClose }: WindowDishesProps) => {
   const [email, setEmail] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [comment, setComment] = useState<string>("");
-
   const [cardNumber, setCardNumber] = useState<string>("");
   const [cardExpiry, setCardExpiry] = useState<string>("");
   const [cardCVC, setCardCVC] = useState<string>("");
+
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectTimeAuto, setSelectTimeAuto] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -46,26 +46,90 @@ const Order = ({ handleClose }: WindowDishesProps) => {
     fetchUserData();
   }, [user]);
 
-  const isValidTime = (time: string): boolean => {
-    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Формат HH:MM (24-годинний)
-    return timeRegex.test(time);
+  const getAsSoonAsPossibleTime = () => {
+    const now = new Date();
+    now.setSeconds(now.getSeconds() + 20);
+    return now.toISOString();
+  };
+
+  const handleSelectAsSoonAsPossible = () => {
+    setSelectTimeAuto(true);
+    setSelectedTime("");
+  };
+
+  const handleManualTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = e.target.value;
+    setSelectTimeAuto(false);
+    setSelectedTime(time);
+  };
+
+  const formatTimeForDisplay = (time: string) => {
+    const date = new Date(time);
+    if (isNaN(date.getTime())) {
+      return time;
+    }
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   const handleSubmit = async () => {
-    // Перевірка часу
-    if (!selectTimeAuto && !isValidTime(selectedTime)) {
-      toast.error("Invalid time format. Please use HH:MM format.", {
-        className: "toast-error",
-        icon: false,
-      });
-      return; // Зупиняємо виконання, якщо час некоректний
+    let timeResult = "";
+    if (!selectTimeAuto) {
+      const [hours, minutes] = selectedTime.split(":").map(Number);
+      const now = new Date();
+      const selectedDateTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        hours,
+        minutes,
+        0,
+        0,
+      );
+
+      const minAllowedTime = new Date();
+      minAllowedTime.setMinutes(minAllowedTime.getMinutes() + 30);
+
+      const maxAllowedTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        23,
+        0,
+        0,
+        0,
+      );
+
+      if (
+        isNaN(selectedDateTime.getTime()) ||
+        selectedDateTime < minAllowedTime ||
+        selectedDateTime > maxAllowedTime
+      ) {
+        toast.error(
+          `Invalid time. Please select a time between ${formatTimeForDisplay(
+            minAllowedTime.toISOString(),
+          )} and ${formatTimeForDisplay(maxAllowedTime.toISOString())}.`,
+          {
+            className: "toast-error custom-toast",
+            hideProgressBar: true,
+            autoClose: 3000,
+            closeOnClick: true,
+            icon: false,
+            position: "top-center",
+          },
+        );
+        return;
+      }
+
+      timeResult = selectedDateTime.toISOString();
+    } else {
+      timeResult = getAsSoonAsPossibleTime();
     }
 
     const orderData = {
       totalAmount: cart.reduce((accum, cur) => accum + cur.price, 0),
       totalQuantity: cart.reduce((accum, cur) => accum + cur.quantity, 0),
       paymentMethod,
-      selectedTime: selectTimeAuto ? "As soon as possible" : selectedTime,
+      selectedTime: timeResult,
       comment,
       dishes: cart.map((item) => ({
         dishId: item.dishId,
@@ -77,7 +141,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
         name: item.name,
       })),
       cardDetails:
-        paymentMethod === "card" ? { cardNumber, cardExpiry, cardCVC } : null,
+        paymentMethod === "Card" ? { cardNumber, cardExpiry, cardCVC } : null,
       userId: user?.uid || "",
       user: {
         firstName: firstName || "",
@@ -89,17 +153,29 @@ const Order = ({ handleClose }: WindowDishesProps) => {
     };
 
     try {
-      await saveOrder(orderData);
+      const docRef = await saveOrder(orderData);
+      addOrder({
+        id: docRef,
+        ...orderData,
+      });
       toast.success(`Order successfully created!`, {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       setCart([]);
       handleClose();
     } catch (error) {
       toast.error("Failed to create order. Please try again.", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Failed to save order:", error);
     }
@@ -147,7 +223,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
     if (!cart.length) {
       handleClose();
     }
-  }, [cart]);
+  }, [cart, handleClose]);
 
   return (
     <div className="custom-scrollbar-1 grid h-[calc(100vh-100px)] grid-cols-1 gap-8 overflow-y-auto text-2xl md:grid-cols-2">
@@ -299,18 +375,18 @@ const Order = ({ handleClose }: WindowDishesProps) => {
         <h1 className="my-1 text-center text-3xl">Payment method</h1>
         <div className="flex w-full justify-center gap-4">
           <button
-            onClick={() => setPaymentMethod("card")}
+            onClick={() => setPaymentMethod("Card")}
             className={`w-full cursor-pointer rounded-4xl px-6 py-2 transition-colors duration-100 ease-in-out ${
-              paymentMethod === "card" ? "bg-[#F2A30F]" : "bg-[#FAB735]"
+              paymentMethod === "Card" ? "bg-[#F2A30F]" : "bg-[#FAB735]"
             }`}
           >
             Card
           </button>
 
           <button
-            onClick={() => setPaymentMethod("cash")}
+            onClick={() => setPaymentMethod("Cash")}
             className={`w-full cursor-pointer rounded-4xl px-6 py-2 transition-colors duration-100 ease-in-out ${
-              paymentMethod === "cash" ? "bg-[#F2A30F]" : "bg-[#FAB735]"
+              paymentMethod === "Cash" ? "bg-[#F2A30F]" : "bg-[#FAB735]"
             }`}
           >
             Cash
@@ -320,8 +396,8 @@ const Order = ({ handleClose }: WindowDishesProps) => {
           className={`mt-2 w-full rounded-4xl border-2 border-[#FAB735] bg-[#FBE7BB] p-4`}
           initial={{ maxHeight: 0, opacity: 0 }}
           animate={{
-            maxHeight: paymentMethod === "card" ? "240px" : 0,
-            opacity: paymentMethod === "card" ? 1 : 0,
+            maxHeight: paymentMethod === "Card" ? "240px" : 0,
+            opacity: paymentMethod === "Card" ? 1 : 0,
           }}
           exit={{
             maxHeight: 0,
@@ -365,21 +441,28 @@ const Order = ({ handleClose }: WindowDishesProps) => {
         <h1 className="mb-4 text-center text-3xl">Time</h1>
         <div className="flex w-full justify-center gap-4">
           <button
-            onClick={() => setSelectTimeAuto(true)}
+            onClick={handleSelectAsSoonAsPossible}
             className={`w-full cursor-pointer rounded-4xl px-6 py-2 transition-colors duration-100 ease-in-out ${
               selectTimeAuto ? "bg-[#F2A30F]" : "bg-[#FAB735]"
             }`}
           >
-            As soon as possible 18:00
+            As soon as possible (
+            {formatTimeForDisplay(getAsSoonAsPossibleTime())})
           </button>
           <input
             type="text"
             onClick={() => setSelectTimeAuto(false)}
-            placeholder="Choose time (00:00)"
+            placeholder="Choose time (HH:MM)"
             className={`w-full cursor-pointer rounded-4xl px-6 py-2 transition-colors duration-100 ease-in-out focus:outline-none ${
               !selectTimeAuto ? "bg-[#F2A30F]" : "bg-[#FAB735]"
             }`}
-            onChange={(e) => setSelectedTime(e.target.value)}
+            value={
+              selectTimeAuto ? formatTimeForDisplay(selectedTime) : selectedTime
+            }
+            onChange={(e) => {
+              handleManualTimeChange(e);
+              setSelectTimeAuto(false);
+            }}
           />
         </div>
       </div>

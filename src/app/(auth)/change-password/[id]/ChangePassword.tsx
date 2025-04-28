@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Quotes from "@/components/Decorations/Quotes";
@@ -8,10 +9,9 @@ import { toast } from "react-toastify";
 import { useRouter, useParams } from "next/navigation";
 import { MoonLoader } from "react-spinners";
 
-
-const ChangePasswordClientComponent = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+const ChangePassword = () => {
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const { changePassword } = useAuth();
   const router = useRouter();
   const { id } = useParams();
@@ -22,14 +22,22 @@ const ChangePasswordClientComponent = () => {
       setLoading(true);
       await changePassword(currentPassword, newPassword);
       toast.success("Password changed successfully!", {
-        className: "toast-success",
+        className: "toast-success custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       router.push(`/profile/${id}`);
     } catch (error) {
       toast.error("Failed to change password!", {
-        className: "toast-error",
+        className: "toast-error custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+        closeOnClick: true,
         icon: false,
+        position: "top-center",
       });
       console.error("Failed to change password:", error);
     } finally {
@@ -103,4 +111,4 @@ const ChangePasswordClientComponent = () => {
   );
 };
 
-export default ChangePasswordClientComponent;
+export default ChangePassword;

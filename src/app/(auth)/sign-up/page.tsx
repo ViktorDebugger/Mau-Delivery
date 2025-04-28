@@ -1,14 +1,11 @@
-
-import SignUpClient from "./SignUpClientComponent";
+import SignUp from "./SignUp";
 
 export const metadata = {
   title: "Sign Up",
 };
 
 const SignUpPage = () => {
-  return (
-    <SignUpClient />
-  );
+  return <SignUp />;
 };
 
 export default SignUpPage;

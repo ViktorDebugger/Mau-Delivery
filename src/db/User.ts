@@ -25,3 +25,18 @@ export const getUserData = async (id: string): Promise<UserData | null> => {
     return null;
   }
 };
+
+export const getUserAvatar = async (id: string): Promise<string | null> => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", id));
+    if (userDoc.exists()) {
+      return userDoc.data()?.avatar || null;
+    } else {
+      console.log("No such user!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user avatar: ", error);
+    return null;
+  }
+};

@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import topTrace from "../../../public/images/bg-items/top-trace.png";
 import downTrace from "../../../public/images/bg-items/down-trace.png";
 

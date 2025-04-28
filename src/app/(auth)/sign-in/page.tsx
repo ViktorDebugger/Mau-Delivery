@@ -1,11 +1,11 @@
-import SignInClientComponent from "./SignInClientComponent";
+import SignIn from "./SignIn";
 
 export const metadata = {
   title: "Sign In",
 };
 
 const SignInPage = () => {
-  return <SignInClientComponent />;
+  return <SignIn />;
 };
 
 export default SignInPage;

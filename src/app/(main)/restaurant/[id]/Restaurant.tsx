@@ -2,25 +2,22 @@
 
 import Image from "next/image";
 import { useParams } from "next/navigation";
-
 import { useState, useEffect } from "react";
 import { MoonLoader } from "react-spinners";
-
 import ReviewsSlider from "@/components/Other/ReviewsSlider";
 import HorizontalTrace from "@/components/Decorations/HorizontalTrace";
 import CardDish from "@/components/Other/CardDish";
 import bgItem05 from "../../../../../public/images/bg-items/bg-item-5.png";
 import { getRestaurantById } from "@/db/Restaurant";
-import type { Restaurant } from "@/types/restaurant.types";
-import type { Dish } from "@/types/dish.types";
+import type { RestaurantType } from "@/types/restaurant.types";
+import type { DishType } from "@/types/dish.types";
 import { getDishesByRestaurantName } from "@/db/Dish";
 
-export default function RestaurantClientComponent() {
+const Restaurant = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
-  const [dishes, setDishes] = useState<Dish[] | []>([]);
+  const [restaurant, setRestaurant] = useState<RestaurantType | null>(null);
+  const [dishes, setDishes] = useState<DishType[] | []>([]);
   const [notFound, setNotFound] = useState<boolean>(false);
-
   const params = useParams();
   const id = params.id as string;
 
@@ -81,7 +78,7 @@ export default function RestaurantClientComponent() {
             <div className="flex flex-col" data-aos="fade-right">
               <div className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
                 <Image
-                  className="relative top-1/2 left-0 z-10 rounded-4xl border-4 border-[#F2680F] transition-transform duration-300 object-cover"
+                  className="relative top-1/2 left-0 z-10 rounded-4xl border-4 border-[#F2680F] bg-[#D1D5DB] transition-transform duration-300 object-cover"
                   src={restaurant!.image}
                   alt=""
                   fill
@@ -111,7 +108,7 @@ export default function RestaurantClientComponent() {
               {dishes.length ? (
                 <ul className="my-9 grid grid-cols-1 gap-2 px-0 md:grid-cols-2 lg:gap-6 lg:px-4 xl:grid-cols-3">
                   {dishes.map((dish) => (
-                    <CardDish key={dish.id} dish={dish} restaurant={restaurant as Restaurant} />
+                    <CardDish key={dish.id} dish={dish} restaurant={restaurant as RestaurantType} />
                   ))}
                 </ul>
               ) : (
@@ -129,3 +126,5 @@ export default function RestaurantClientComponent() {
     </>
   );
 }
+
+export default Restaurant;

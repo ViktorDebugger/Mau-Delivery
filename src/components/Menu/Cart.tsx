@@ -1,21 +1,19 @@
 "use client";
 
 import Image from "next/image";
-
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBasket, ChevronUp, ChevronDown, X } from "lucide-react";
-
 import { useCart } from "@/context/CartContext";
 import Order from "../Windows/Order";
 import Window from "../Windows/Window";
-import type { CartItem } from "@/types/cart.types";
+import type { CartItemType } from "@/types/cart.types";
 
 const Cart = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { cart, setCart } = useCart();
-  const cartItems: CartItem[] = cart;
+  const cartItems: CartItemType[] = cart;
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [windowOrder, setWindowOrder] = useState<boolean>(false);
   const [isClosing, setIsClosing] = useState<boolean>(false);
@@ -137,20 +135,17 @@ const Cart = () => {
                       className="flex justify-between gap-1 rounded-2xl bg-[#FBE7BB] p-2 text-2xl"
                     >
                       <div className="flex gap-4">
-                        <div className="w-16 h-16 overflow-hidden relative">
+                        <div className="relative h-16 w-16 overflow-hidden">
                           <Image
                             className="rounded-2xl object-cover"
                             src={item.image}
                             alt="dish"
                             fill
                             sizes="64px"
-
                           />
                         </div>
                         <div>
-                          <h1 className="line-clamp-1">
-                            {item.name}
-                          </h1>
+                          <h1 className="line-clamp-1">{item.name}</h1>
                           <p>{item.price} UAN</p>
                         </div>
                       </div>
