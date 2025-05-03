@@ -27,6 +27,13 @@ gray              #9CA3AF
 gray-dark         #374151
 */
 
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    @apply appearance-none;
+  }
+}
+
 .font-karantina {
   font-family: var(--font-karantina);
 }
@@ -42,12 +49,12 @@ gray-dark         #374151
     transform: translateY(0);
   }
   100% {
-    transform: translateY(calc(-52% - 200px));
+    transform: translateY(calc(-31% - 200px));
   }
 }
 
 .animate-infinite-scroll-vertical {
-  animation: infinite-scroll-vertical 10s linear infinite;
+  animation: infinite-scroll-vertical 5s linear infinite;
   will-change: transform;
   backface-visibility: hidden;
   perspective: 1000px;

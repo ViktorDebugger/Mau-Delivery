@@ -53,7 +53,6 @@ const Order = ({ order }: OrderProps) => {
     restaurantId: string,
     restaurantName: string,
   ) => {
-    console.log("restaurantId", restaurantId);
     setSelectedRestaurantId(restaurantId);
     setSelectedTitle(restaurantName);
     setIsClosing(false);
@@ -89,6 +88,7 @@ const Order = ({ order }: OrderProps) => {
       <li
         className="rounded-4xl border-4 border-[#FAB735] bg-[#F2680F] p-4 text-3xl"
         data-aos="fade-up"
+        data-aos-offset="-400"
       >
         <div className="flex flex-col items-center justify-between gap-4 rounded-2xl bg-[#FBE7BB] p-4 text-xl leading-[1] sm:text-3xl xl:flex-row">
           <div className="flex w-9/10 justify-between gap-4 xl:w-3/10">
@@ -126,7 +126,7 @@ const Order = ({ order }: OrderProps) => {
               key={dish.dishId}
               className="flex gap-2 rounded-2xl bg-[#FBE7BB] p-4"
             >
-              <div className="relative h-48 w-48">
+              <figure className="relative h-48 w-48">
                 <Image
                   src={dish.image}
                   alt={dish.name}
@@ -134,7 +134,7 @@ const Order = ({ order }: OrderProps) => {
                   sizes="200px"
                   className="rounded-2xl object-cover"
                 />
-              </div>
+              </figure>
               <div className="flex w-full flex-col justify-between gap-4">
                 <div className="flex flex-col justify-evenly gap-4 rounded-2xl bg-[#F6DA9E] px-4 py-1 text-lg sm:text-xl md:text-3xl">
                   <div className="flex flex-col sm:flex-row">
@@ -157,7 +157,7 @@ const Order = ({ order }: OrderProps) => {
                       onClick={() =>
                         handleOpenDishComment(dish.dishId, dish.name)
                       }
-                      className="cursor-pointer rounded-2xl bg-[#F6DA9E] px-2 transition-colors duration-300 ease-in-out hover:bg-[#EAC984] md:px-4"
+                      className="cursor-pointer rounded-2xl bg-[#F2680F] px-2 transition-colors duration-300 ease-in-out hover:bg-[#F2570F] md:px-4"
                     >
                       Comment a Dish
                     </button>
@@ -168,7 +168,7 @@ const Order = ({ order }: OrderProps) => {
                           dish.restaurant,
                         )
                       }
-                      className="cursor-pointer rounded-2xl bg-[#F6DA9E] px-2 transition-colors duration-300 ease-in-out hover:bg-[#EAC984] md:px-4"
+                      className="cursor-pointer rounded-2xl bg-[#F2680F] px-2 transition-colors duration-300 ease-in-out hover:bg-[#F2570F] md:px-4"
                     >
                       Comment a Restaurant
                     </button>
@@ -201,7 +201,7 @@ const Order = ({ order }: OrderProps) => {
             ) : (
               <div className="flex h-full w-full items-center justify-center">
                 <p className="text-center text-lg font-bold md:text-xl lg:text-3xl">
-                  No comment
+                  No comment to order
                 </p>
               </div>
             )}
@@ -231,7 +231,13 @@ const Order = ({ order }: OrderProps) => {
           isClosing={isClosing}
           windowWidth={"w-full md:w-9/10 lg:w-8/10 xl:w-7/10"}
           windowHeight={""}
-          ChildComponent={<Status handleClose={handleClose} selectedTime={order.selectedTime} createdAt={order.createdAt} />}
+          ChildComponent={
+            <Status
+              handleClose={handleClose}
+              selectedTime={order.selectedTime}
+              createdAt={order.createdAt}
+            />
+          }
         />
       )}
       {windowDishComment && selectedDishId && (

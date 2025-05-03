@@ -43,7 +43,6 @@ const changePassword = async (currentPassword: string, newPassword: string) => {
       );
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPassword);
-      console.log("Password updated successfully");
     } catch (error) {
       console.error("Failed to update password:", error);
       throw error;
@@ -59,7 +58,6 @@ const updateEmailInAuth = async (newEmail: string) => {
   if (user) {
     try {
       await updateEmail(user, newEmail);
-      console.log("Email updated successfully in authentication");
     } catch (error) {
       console.error("Failed to update email in authentication:", error);
       throw error;
@@ -108,7 +106,6 @@ const logout = async () => {
 const resetPassword = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    console.log("Password reset email sent successfully");
   } catch (error) {
     console.error("Failed to send password reset email:", error);
     throw error;

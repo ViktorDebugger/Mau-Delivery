@@ -25,7 +25,7 @@ const Top = () => {
   }, []);
 
   return (
-    <section id="top-section" className="relative mt-96" data-aos="fade-up">
+    <section id="top-section" className="relative mt-96" data-aos="fade-up" data-aos-offset="400">
       <div>
         <h1 className="font-karantina relative z-1 text-center text-8xl">
           Top 10

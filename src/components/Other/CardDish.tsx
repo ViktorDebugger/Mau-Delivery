@@ -86,6 +86,7 @@ const CardDishMenu = ({ dish, restaurant }: CardDishProps) => {
         key={dish.id}
         className="mx-auto flex max-w-full gap-3 rounded-4xl bg-[#F2680F] p-4 transition-colors duration-300 ease-in-out md:max-w-98"
         data-aos="fade-up"
+        data-aos-offset="-200"
       >
         <div className="flex flex-col items-center">
           <Link

@@ -9,12 +9,13 @@ const HorizontalTrace = () => {
         {[...Array(20), ...Array(20)].map((_, index) => {
           return (
             <li key={index} className="h-50 w-20">
-              <Image
-                src={index % 2 ? downTrace : topTrace}
-                alt=""
-                width={80}
-                height={200}
-              />
+              <figure className="w-full h-full">
+                <Image
+                  src={index % 2 ? downTrace : topTrace}
+                  alt=""
+                  width={80}
+                />
+              </figure>
             </li>
           );
         })}

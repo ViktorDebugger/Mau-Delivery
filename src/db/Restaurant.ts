@@ -14,8 +14,7 @@ import type { RestaurantType } from "@/types/restaurant.types";
 
 export const addRestaurantToFirestore = async (restaurant: RestaurantType) => {
   try {
-    const docRef = await addDoc(collection(db, "restaurants"), restaurant);
-    console.log("Document written with ID: ", docRef.id);
+    await addDoc(collection(db, "restaurants"), restaurant);
   } catch (error) {
     console.error("Error adding document: ", error);
   }
@@ -42,7 +41,7 @@ export const getAllRestaurantsFromFirestore = async (): Promise<
 
     return restaurants;
   } catch (error) {
-    console.log("Error getting documents: ", error);
+    console.error("Error getting restaurants: ", error);
     return [];
   }
 };
@@ -57,7 +56,6 @@ export const getRestaurantById = async (
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() } as RestaurantType;
     } else {
-      console.log("No such document!");
       return null;
     }
   } catch (error) {
@@ -77,7 +75,6 @@ export const getRestaurantByName = async (
       const doc = querySnapshot.docs[0];
       return { id: doc.id, ...doc.data() } as RestaurantType;
     } else {
-      console.log("No such restaurant found!");
       return null;
     }
   } catch (error) {

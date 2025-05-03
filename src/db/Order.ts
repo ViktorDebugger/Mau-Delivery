@@ -12,7 +12,6 @@ export const saveOrder = async (
     };
 
     const docRef = await addDoc(collection(db, "orders"), orderData);
-    console.log("Order saved with ID: ", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error saving order: ", error);

@@ -12,7 +12,8 @@ const Preview = () => {
     const topSection = document.getElementById("top-section");
     if (topSection) {
       const offset = -120;
-      const topPosition = topSection.getBoundingClientRect().top + window.scrollY + offset;
+      const topPosition =
+        topSection.getBoundingClientRect().top + window.scrollY + offset;
       window.scrollTo({
         top: topPosition,
         behavior: "smooth",
@@ -27,7 +28,6 @@ const Preview = () => {
         src={bgItem02}
         alt=""
         width={375}
-        height={375}
         data-aos="fade-down"
       />
       <Image
@@ -35,7 +35,6 @@ const Preview = () => {
         src={bgItem01}
         alt=""
         width={250}
-        height={1000}
         data-aos="fade-down"
       />
       <Image
@@ -43,7 +42,6 @@ const Preview = () => {
         src={bgItem08}
         alt=""
         width={600}
-        height={300}
         data-aos="fade-right"
       />
       <div className="flex justify-center">
@@ -75,7 +73,6 @@ const Preview = () => {
             src={delivery}
             alt="MEOW"
             width={430}
-            height={430}
             data-aos="fade-up"
           />
         </div>

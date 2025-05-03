@@ -116,7 +116,7 @@ const Dishes = ({ handleClose }: WindowDishesProps) => {
                   onClick={() => handleClose()}
                   className="flex h-full w-full cursor-pointer items-center gap-4"
                 >
-                  <div className="relative h-24 w-24 overflow-hidden rounded-4xl">
+                  <figure className="relative h-24 w-24 overflow-hidden rounded-4xl">
                     <Image
                       src={dish.image}
                       alt={dish.name}
@@ -124,7 +124,7 @@ const Dishes = ({ handleClose }: WindowDishesProps) => {
                       className="object-cover"
                       sizes="100px"
                     />
-                  </div>
+                  </figure>
                   <div className="w-3/4">
                     <h1 className="line-clamp-2x text-xl font-bold md:text-3xl">
                       {dish.name}

@@ -51,7 +51,7 @@ const UserReviewsSlider = ({ userId }: UserReviewsSliderProps) => {
         </div>
       ) : notFound ? (
         <div className="flex w-full items-center justify-center">
-          <div className="mt-6 flex h-40 w-4/10 items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
+          <div className="mt-6 flex h-40 w-8/10 md:w-4/10 items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
             Reviews not found
           </div>
         </div>
@@ -79,7 +79,7 @@ const UserReviewsSlider = ({ userId }: UserReviewsSliderProps) => {
             onBeforeInit={(swiper) => {
               swiperRef.current = swiper;
             }}
-            loop={true}
+            loop={reviews.length > 1}
             spaceBetween={20}
             slidesPerView={1}
             speed={200}
@@ -91,7 +91,7 @@ const UserReviewsSlider = ({ userId }: UserReviewsSliderProps) => {
                   <div className="mb-4 flex flex-col items-start justify-between gap-4 xl:flex-row xl:items-center">
                     <div className="flex items-center gap-4">
                       {review.avatar && (
-                        <div className="h-12 w-12 md:h-20 md:w-20">
+                        <figure className="h-12 w-12 md:h-20 md:w-20">
                           <Image
                             src={review.avatar}
                             alt={review.username}
@@ -99,7 +99,7 @@ const UserReviewsSlider = ({ userId }: UserReviewsSliderProps) => {
                             height={80}
                             className="rounded-full"
                           />
-                        </div>
+                        </figure>
                       )}
                       <h3 className="text-lg font-bold sm:text-xl md:text-3xl">
                         {review.type === "dish"

@@ -48,7 +48,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
 
   const getAsSoonAsPossibleTime = () => {
     const now = new Date();
-    now.setSeconds(now.getSeconds() + 20);
+    now.setMinutes(now.getMinutes() + 30);
     return now.toISOString();
   };
 
@@ -126,7 +126,10 @@ const Order = ({ handleClose }: WindowDishesProps) => {
     }
 
     const orderData = {
-      totalAmount: cart.reduce((accum, cur) => accum + cur.price, 0),
+      totalAmount: cart.reduce(
+        (accum, cur) => accum + cur.quantity * cur.price,
+        0,
+      ),
       totalQuantity: cart.reduce((accum, cur) => accum + cur.quantity, 0),
       paymentMethod,
       selectedTime: timeResult,
@@ -181,9 +184,6 @@ const Order = ({ handleClose }: WindowDishesProps) => {
     }
   };
 
-  const findDish = (dishId: string) => {
-    return cart.find((item) => item.dishId === dishId);
-  };
   const handleIncreaseQuantity = (dishId: string) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -191,7 +191,6 @@ const Order = ({ handleClose }: WindowDishesProps) => {
           ? {
               ...item,
               quantity: item.quantity + 1,
-              price: (findDish(item.dishId)?.price || 0) * (item.quantity + 1),
             }
           : item,
       ),
@@ -206,8 +205,6 @@ const Order = ({ handleClose }: WindowDishesProps) => {
             ? {
                 ...item,
                 quantity: item.quantity - 1,
-                price:
-                  (findDish(item.dishId)?.price || 0) * (item.quantity - 1),
               }
             : item,
         )
@@ -257,7 +254,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                       className="flex justify-between gap-1 rounded-2xl bg-[#FBE7BB] p-2"
                     >
                       <div className="flex gap-4">
-                        <div className="relative h-16 w-16 overflow-hidden">
+                        <figure className="relative h-16 w-16 overflow-hidden">
                           <Image
                             className="rounded-2xl object-cover"
                             src={item.image}
@@ -265,10 +262,10 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                             fill
                             sizes="64px"
                           />
-                        </div>
+                        </figure>
                         <div>
                           <h1 className="line-clamp-1">{item.name}</h1>
-                          <p>{item.price} UAN</p>
+                          <p>{item.price * item.quantity} UAN</p>
                         </div>
                       </div>
 
@@ -305,7 +302,11 @@ const Order = ({ handleClose }: WindowDishesProps) => {
                 <div className="flex justify-between">
                   <p>Total price</p>
                   <p className="font-bold">
-                    {cart.reduce((accum, cur) => accum + cur.price, 0)} UAN
+                    {cart.reduce(
+                      (accum, cur) => accum + cur.price * cur.quantity,
+                      0,
+                    )}
+                    UAN
                   </p>
                 </div>
                 <div className="flex justify-between">
@@ -408,32 +409,44 @@ const Order = ({ handleClose }: WindowDishesProps) => {
         >
           <div className="flex flex-col gap-4">
             <input
-              type="text"
-              className="w-full rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
+              type="number"
+              className="w-full appearance-none rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
               placeholder="Number"
-              maxLength={16}
               autoComplete="off"
               value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 16) {
+                  setCardNumber(value);
+                }
+              }}
             />
             <div className="grid grid-cols-2 gap-4">
               <input
-                type="text"
-                className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
+                type="number"
+                className="appearance-none rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
                 placeholder="Valid until"
-                maxLength={5}
                 autoComplete="off"
                 value={cardExpiry}
-                onChange={(e) => setCardExpiry(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 4) {
+                    setCardExpiry(value);
+                  }
+                }}
               />
               <input
-                type="text"
-                className="rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
+                type="number"
+                className="appearance-none rounded-4xl bg-[#FAB735] px-4 py-2 placeholder:text-[#000000]/70 focus:outline-none"
                 placeholder="Code"
-                maxLength={3}
                 autoComplete="off"
                 value={cardCVC}
-                onChange={(e) => setCardCVC(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 3) {
+                    setCardCVC(value);
+                  }
+                }}
               />
             </div>
           </div>

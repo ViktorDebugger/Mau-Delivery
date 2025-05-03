@@ -134,7 +134,6 @@ const Dish = () => {
               src={bgItem05}
               alt=""
               width={560}
-              height={200}
               data-aos="fade-down"
             />
             <article className="flex flex-col items-center justify-between lg:flex-row">
@@ -151,7 +150,7 @@ const Dish = () => {
                 <p className="relative z-10 w-full rounded-4xl border-4 border-[#F2680F] bg-[#FAB735] p-4 text-3xl md:w-7/10">
                   {dish!.description}
                 </p>
-                <div className="flex w-6/10 flex-col gap-2 text-3xl md:w-3/10">
+                <div className="flex w-8/10 flex-col gap-2 text-3xl md:w-3/10">
                   <button
                     onClick={() =>
                       isItemInCart ? handleDeleteFromCart() : handleAddToCart()
@@ -180,7 +179,7 @@ const Dish = () => {
 
             <article className="relative z-10 mt-8 flex flex-col items-center justify-around gap-2 lg:flex-row">
               <div className="flex flex-col" data-aos="fade-right">
-                <div className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
+                <figure className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
                   <Image
                     className="relative top-1/2 left-0 z-10 translate-y-1 rounded-4xl border-4 border-[#F2680F] bg-[#D1D5DB] object-cover transition-transform duration-300"
                     src={dish!.image}
@@ -189,7 +188,7 @@ const Dish = () => {
                     sizes="400px"
                     priority
                   />
-                </div>
+                </figure>
                 <div className="mb-10 flex justify-center">
                   <div className="relative z-10 -mt-8 w-9/10 rounded-2xl border-4 border-[#FAB735] bg-[#F2680F] p-4">
                     <div className="relative z-40 w-full text-2xl">

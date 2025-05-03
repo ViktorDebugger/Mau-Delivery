@@ -14,8 +14,7 @@ import type { DishType } from "@/types/dish.types";
 
 export const addDishToFirestore = async (dish: DishType) => {
   try {
-    const docRef = await addDoc(collection(db, "dishes"), dish);
-    console.log("Document written with ID: ", docRef.id);
+    await addDoc(collection(db, "dishes"), dish);
   } catch (error) {
     console.error("Error adding document: ", error);
   }
@@ -51,7 +50,6 @@ export const getDishById = async (id: string): Promise<DishType | null> => {
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() } as DishType;
     } else {
-      console.log("No such document!");
       return null;
     }
   } catch (error) {

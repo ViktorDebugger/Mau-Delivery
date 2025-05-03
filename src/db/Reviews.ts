@@ -7,7 +7,6 @@ export const saveDishReview = async (review: ReviewDishType): Promise<void> => {
   try {
     const reviewsRef = collection(db, "dishReviews");
     await addDoc(reviewsRef, review);
-    console.log("Dish review saved successfully!");
   } catch (error) {
     console.error("Error saving dish review:", error);
     throw new Error("Failed to save dish review");
@@ -20,7 +19,6 @@ export const saveRestaurantReview = async (
   try {
     const reviewsRef = collection(db, "restaurantReviews");
     await addDoc(reviewsRef, review);
-    console.log("Restaurant review saved successfully!");
   } catch (error) {
     console.error("Error saving restaurant review:", error);
     throw new Error("Failed to save restaurant review");

@@ -32,7 +32,7 @@ const CardDishTop = ({ dish }: CardDishTopProps) => {
     <li className="relative z-1 w-74 cursor-pointer rounded-4xl bg-[#F2680F] px-4 py-4 transition-colors duration-300 ease-in-out hover:bg-[#F2570F]">
       <Link href={`/dish/${dish.id}`}>
         <div className="flex justify-center">
-          <div className="relative h-48 w-64">
+          <figure className="relative h-48 w-64">
             <Image
               className="rounded-4xl object-cover"
               src={dish.image}
@@ -40,7 +40,7 @@ const CardDishTop = ({ dish }: CardDishTopProps) => {
               fill
               sizes="250px"
             />
-          </div>
+          </figure>
         </div>
 
         <h1 className="line-clamp-1 text-4xl font-bold">{dish.name}</h1>

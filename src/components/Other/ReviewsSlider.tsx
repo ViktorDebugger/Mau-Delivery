@@ -73,7 +73,7 @@ const ReviewsSlider = ({ dishId, restaurantId }: ReviewsSliderProps) => {
         </div>
       ) : notFound ? (
         <div className="flex w-full items-center justify-center">
-          <div className="mt-6 flex h-40 w-1/2 items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
+          <div className="mt-6 flex h-40 w-9/10 md:w-1/2 items-center justify-center rounded-2xl bg-[#F6DA9E] text-3xl">
             Reviews not found
           </div>
         </div>
@@ -101,7 +101,7 @@ const ReviewsSlider = ({ dishId, restaurantId }: ReviewsSliderProps) => {
             onBeforeInit={(swiper) => {
               swiperRef.current = swiper;
             }}
-            loop={true}
+            loop={reviews.length > 1}
             spaceBetween={20}
             slidesPerView={1}
             speed={200}
@@ -112,7 +112,7 @@ const ReviewsSlider = ({ dishId, restaurantId }: ReviewsSliderProps) => {
                 <div className="h-auto rounded-4xl bg-[#FAB735] p-6 shadow-md">
                   <div className="mb-4 flex flex-col items-start justify-between gap-4 xl:flex-row xl:items-center">
                     <div className="flex items-center gap-4">
-                      <div className="relative h-10 w-10 md:h-20 md:w-20">
+                      <figure className="relative h-10 w-10 md:h-20 md:w-20">
                         <Image
                           src={`${review.avatar ? review.avatar : userIcon}`}
                           alt="User Avatar"
@@ -120,7 +120,7 @@ const ReviewsSlider = ({ dishId, restaurantId }: ReviewsSliderProps) => {
                           sizes="80px"
                           className="rounded-full object-fill"
                         />
-                      </div>
+                      </figure>
                       <h3 className="text-lg font-bold sm:text-xl md:text-3xl">
                         {review.username}
                       </h3>

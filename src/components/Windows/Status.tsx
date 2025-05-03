@@ -69,7 +69,7 @@ const Status = ({
       </div>
       <div className="mt-16 flex w-full flex-col items-center justify-between text-3xl md:flex-row">
         <div className="flex w-full items-center gap-4 rounded-4xl bg-[#F2680F] p-4 md:w-4/10">
-          <div className="w-2/10 xl:w-3/10">
+          <figure className="w-2/10 xl:w-3/10">
             <Image
               src={userIcon}
               alt=""
@@ -77,15 +77,15 @@ const Status = ({
               height={100}
               className="rounded-full"
             />
-          </div>
+          </figure>
           <div className="text-xl lg:text-2xl">
             <p>Courier</p>
             <p>+380000000000</p>
           </div>
         </div>
-        <div className="mt-4 flex w-full justify-center md:mt-0 md:w-2/10">
+        <figure className="mt-4 flex w-full justify-center md:mt-0 md:w-2/10">
           <Image src={status} alt="User Profile" width={200} height={250} />
-        </div>
+        </figure>
       </div>
     </div>
   );

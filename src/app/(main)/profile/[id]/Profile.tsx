@@ -47,17 +47,21 @@ const Profile = () => {
 
   const handleLogout = async () => {
     setLoading(true);
+
     try {
       await logout();
       toast.success("Logout successfully!", {
         className: "toast-success custom-toast",
         hideProgressBar: true,
-        autoClose: 3000,
+        autoClose: 1500,
         closeOnClick: true,
         icon: false,
         position: "top-center",
       });
-      router.replace("/");
+      setTimeout(() => {
+        toast.dismiss();
+        router.replace("/");
+      }, 1500);
     } catch (error) {
       toast.error("Error logging out!", {
         className: "toast-error",
@@ -84,7 +88,6 @@ const Profile = () => {
           <Image
             src={bgItem}
             width={300}
-            height={500}
             alt="bg"
             className="absolute top-0 left-0 hidden lg:block"
             data-aos="fade-right"
@@ -97,7 +100,7 @@ const Profile = () => {
               <div className="absolute top-0 right-0">
                 <Quotes />
               </div>
-              <div className="relative h-56 w-56 rounded-[55px] border-4 border-[#F2680F] bg-[#D1D5DB]">
+              <figure className="relative h-56 w-56 rounded-[55px] border-4 border-[#F2680F] bg-[#D1D5DB]">
                 <Image
                   src={userData?.avatar ? userData?.avatar : userIcon}
                   alt="User Profile"
@@ -105,7 +108,7 @@ const Profile = () => {
                   sizes="230px"
                   className="rounded-[50px] object-cover"
                 />
-              </div>
+              </figure>
               <div className="absolute bottom-0 left-0 rotate-[180deg]">
                 <Quotes />
               </div>
@@ -192,6 +195,7 @@ const Profile = () => {
           <h1
             className="font-karantina mt-40 text-center text-8xl"
             data-aos="fade-up"
+            data-aos-offset="-400"
           >
             Orders
           </h1>

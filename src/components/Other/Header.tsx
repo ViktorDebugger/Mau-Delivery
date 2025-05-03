@@ -12,6 +12,7 @@ import Order from "../Windows/Order";
 import logo from "../../../public/images/logo.png";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [windowDishes, setWindowDishes] = useState<boolean>(false);
@@ -21,6 +22,9 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const { cart } = useCart();
   const { user } = useAuth();
+  const pathname = usePathname();
+
+  const isActive = (path: string) => pathname === path;
 
   const handleClose = () => {
     setIsClosing(true);
@@ -56,6 +60,13 @@ const Header = () => {
     }
   };
 
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <header
@@ -63,9 +74,28 @@ const Header = () => {
         data-aos="fade-down"
       >
         <div className="flex items-center justify-between px-8 py-2">
-          <div className="h-16 w-16 md:h-20 md:w-20">
-            <Image src={logo} alt="MAU Delivery Logo" width={80} height={80} />
-          </div>
+          {pathname === "/" ? (
+            <button
+              className="h-16 w-16 cursor-pointer md:h-20 md:w-20"
+              onClick={handleLogoClick}
+            >
+              <Image
+                src={logo}
+                alt="MAU Delivery Logo"
+                width={80}
+                height={80}
+              />
+            </button>
+          ) : (
+            <Link href={`/`} className="h-16 w-16 cursor-pointer md:h-20 md:w-20">
+              <Image
+                src={logo}
+                alt="MAU Delivery Logo"
+                width={80}
+                height={80}
+              />
+            </Link>
+          )}
 
           <nav className="ml-auto hidden md:block">
             <ul className="flex items-center gap-2 text-3xl lg:text-4xl">
@@ -73,7 +103,9 @@ const Header = () => {
               <li>
                 <button
                   onClick={handleOpenDishes}
-                  className="flex h-12 cursor-pointer items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
+                  className={`flex h-12 cursor-pointer items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5 ${
+                    windowDishes ? "bg-[#FAB735]" : ""
+                  }`}
                 >
                   <span className="-mt-2">Dishes</span>
                 </button>
@@ -81,7 +113,7 @@ const Header = () => {
               <li>
                 <button
                   onClick={handleOpenRestaurants}
-                  className="flex h-12 cursor-pointer items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
+                  className={`flex h-12 cursor-pointer items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5 ${windowRestaurants ? "bg-[#FAB735]" : ""}`}
                 >
                   <span className="-mt-2">Restaurants</span>
                 </button>
@@ -89,7 +121,9 @@ const Header = () => {
               <li>
                 <Link
                   href="/"
-                  className="flex h-12 cursor-pointer items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
+                  className={`flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out lg:px-5 ${
+                    isActive("/") ? "bg-[#FAB735]" : "hover:bg-[#FAB735]"
+                  }`}
                 >
                   <span className="-mt-2">Home</span>
                 </Link>
@@ -98,14 +132,22 @@ const Header = () => {
                 {user ? (
                   <Link
                     href={`/profile/${user.uid}`}
-                    className="flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
+                    className={`flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out lg:px-5 ${
+                      isActive(`/profile/${user.uid}`)
+                        ? "bg-[#FAB735]"
+                        : "hover:bg-[#FAB735]"
+                    }`}
                   >
                     <span className="-mt-2">Profile</span>
                   </Link>
                 ) : (
                   <Link
                     href="/sign-in"
-                    className="flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out hover:bg-[#FAB735] lg:px-5"
+                    className={`flex h-12 items-center justify-center rounded-4xl px-2 transition-colors duration-300 ease-in-out lg:px-5 ${
+                      isActive("/sign-in")
+                        ? "bg-[#FAB735]"
+                        : "hover:bg-[#FAB735]"
+                    }`}
                   >
                     <span className="-mt-2">Login</span>
                   </Link>
@@ -117,6 +159,7 @@ const Header = () => {
           <div className="flex gap-8 md:hidden">
             {user && (
               <button
+                className={`rounded-full p-1 transition-colors duration-300 ease-in-out ${windowOrder ? "bg-[#FAB735]" : ""}`}
                 onClick={() => {
                   handleOpenOrder();
                   toggleMenu(false);
@@ -235,9 +278,11 @@ const Header = () => {
               isClosing={isClosing}
               windowWidth={"w-5/10"}
               windowHeight={"h-3/10"}
-              ChildComponent={<div className="flex w-full h-full justify-center items-center">
-                <p className="text-4xl">None</p>
-              </div>}
+              ChildComponent={
+                <div className="flex h-full w-full items-center justify-center">
+                  <p className="text-4xl">None</p>
+                </div>
+              }
             />
           )}
         </>

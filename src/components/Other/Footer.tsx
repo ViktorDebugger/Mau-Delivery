@@ -1,5 +1,8 @@
-import Image from "next/image";
+"use client";
 
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTiktok,
@@ -7,12 +10,20 @@ import {
   faTelegram,
   faFacebook,
 } from "@fortawesome/free-brands-svg-icons";
-
 import cats from "../../../public/images/bg-items/cats.png";
 import bgItem04 from "../../../public/images/bg-items/bg-item-4.png";
 import logo from "../../../public/images/logo.png";
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <footer className="relative z-10 mt-46 w-full">
       <Image
@@ -20,8 +31,8 @@ const Footer = () => {
         src={cats}
         alt=""
         width={250}
-        height={150}
         data-aos="fade-up"
+        data-aos-offset="200"
       />
 
       <Image
@@ -29,19 +40,43 @@ const Footer = () => {
         src={bgItem04}
         alt=""
         width={550}
-        height={150}
         data-aos="fade-up"
+        data-aos-offset="200"
       />
 
       <div className="relative z-20 w-full rounded-t-4xl bg-[#FFCA8D] px-4 py-4 xl:px-16">
         <div className="grid grid-cols-1 items-center justify-items-center gap-4 text-3xl md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col items-center gap-1">
-            <Image
-              src={logo}
-              alt="MAU Delivery Logo"
-              width={100}
-              height={100}
-            />
+            {pathname === "/" ? (
+              <button
+                className="h-16 w-16 cursor-pointer md:h-20 md:w-20"
+                onClick={handleLogoClick}
+              >
+                <Image
+                  src={logo}
+                  alt="MAU Delivery Logo"
+                  width={80}
+                  height={80}
+                  priority
+                  loading="eager"
+                />
+              </button>
+            ) : (
+              <Link
+                href={`/`}
+                className="h-16 w-16 cursor-pointer md:h-20 md:w-20"
+              >
+                <Image
+                  src={logo}
+                  alt="MAU Delivery Logo"
+                  width={80}
+                  height={80}
+                  priority
+                  loading="eager"
+                />
+              </Link>
+            )}
+
             <p className="text-xl xl:text-2xl">
               Fast and Reliable Food Delivery
             </p>

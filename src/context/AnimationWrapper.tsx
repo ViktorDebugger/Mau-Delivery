@@ -9,7 +9,6 @@ const AnimationWrapper = ({ children }: { children: React.ReactNode }) => {
     AOS.init({
       duration: 400,
       once: true,
-      offset: -200,
       disable: () => {
         return window.innerWidth < 1000;
       },

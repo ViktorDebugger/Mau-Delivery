@@ -5,7 +5,6 @@ import type { UserData } from "@/types/user.types";
 export const saveUserData = async (id: string, userData: UserData) => {
   try {
     await setDoc(doc(db, "users", id), userData);
-    console.log("User data saved successfully!");
   } catch (error) {
     console.error("Error saving user data: ", error);
   }
@@ -17,7 +16,6 @@ export const getUserData = async (id: string): Promise<UserData | null> => {
     if (userDoc.exists()) {
       return userDoc.data() as UserData;
     } else {
-      console.log("No such user!");
       return null;
     }
   } catch (error) {
@@ -32,7 +30,6 @@ export const getUserAvatar = async (id: string): Promise<string | null> => {
     if (userDoc.exists()) {
       return userDoc.data()?.avatar || null;
     } else {
-      console.log("No such user!");
       return null;
     }
   } catch (error) {

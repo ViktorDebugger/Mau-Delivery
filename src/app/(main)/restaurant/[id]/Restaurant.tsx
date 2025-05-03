@@ -31,7 +31,6 @@ const Restaurant = () => {
         const fetchedDishes = await getDishesByRestaurantName(
           fetchedRestaurant.name,
         );
-        console.log("dishes ", fetchedDishes);
         setDishes(fetchedDishes);
       }
 
@@ -59,7 +58,6 @@ const Restaurant = () => {
             src={bgItem05}
             alt=""
             width={560}
-            height={560}
             data-aos="fade-down"
           />
 
@@ -76,16 +74,16 @@ const Restaurant = () => {
           </article>
           <article className="mt-8 flex flex-col items-center justify-around gap-2 lg:flex-row">
             <div className="flex flex-col" data-aos="fade-right">
-              <div className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
+              <figure className="relative h-78 w-78 overflow-hidden sm:h-96 sm:w-96">
                 <Image
-                  className="relative top-1/2 left-0 z-10 rounded-4xl border-4 border-[#F2680F] bg-[#D1D5DB] transition-transform duration-300 object-cover"
+                  className="relative top-1/2 left-0 z-10 rounded-4xl border-4 border-[#F2680F] bg-[#D1D5DB] object-cover transition-transform duration-300"
                   src={restaurant!.image}
                   alt=""
                   fill
                   sizes="400px"
                   priority
                 />
-              </div>
+              </figure>
             </div>
             <div
               className="mt-8 w-8/10 lg:mt-0 lg:w-6/10 xl:w-7/10"
@@ -101,6 +99,7 @@ const Restaurant = () => {
             <h1
               className="font-karantina relative z-20 mt-16 text-center text-8xl"
               data-aos="fade-up"
+              data-aos-offset="-200"
             >
               Menu
             </h1>
@@ -108,7 +107,11 @@ const Restaurant = () => {
               {dishes.length ? (
                 <ul className="my-9 grid grid-cols-1 gap-2 px-0 md:grid-cols-2 lg:gap-6 lg:px-4 xl:grid-cols-3">
                   {dishes.map((dish) => (
-                    <CardDish key={dish.id} dish={dish} restaurant={restaurant as RestaurantType} />
+                    <CardDish
+                      key={dish.id}
+                      dish={dish}
+                      restaurant={restaurant as RestaurantType}
+                    />
                   ))}
                 </ul>
               ) : (
@@ -125,6 +128,6 @@ const Restaurant = () => {
       )}
     </>
   );
-}
+};
 
 export default Restaurant;

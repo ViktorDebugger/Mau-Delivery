@@ -1,3 +1,5 @@
+"use client";
+
 import CardTeamPerson from "@/components/Home/CardTeamPerson";
 
 export interface TeamPerson {
@@ -42,7 +44,11 @@ const Team = () => {
   ];
 
   return (
-    <section className="relative mt-24" data-aos="fade-up">
+    <section
+      className="relative mt-24"
+      data-aos="fade-up"
+      data-aos-offset="400"
+    >
       <div>
         <h1 className="font-karantina relative z-1 text-center text-8xl">
           Our Team

@@ -106,7 +106,6 @@ const SignUp = () => {
         icon: false,
         position: "top-center",
       });
-      console.log("User registered and data saved!");
       router.push(`/profile/${user.uid}`);
     } catch (error) {
       toast.error("Error registering user!", {
@@ -130,7 +129,7 @@ const SignUp = () => {
           <MoonLoader color="#F2680F" loading={loading} size={100} />
         </div>
       ) : (
-        <div className={`relative ${loading ? "hidden" : ""} mt-100 sm:mt-0`}>
+        <div className={`relative ${loading ? "hidden" : ""} mt-80 md:mt-0`}>
           <div
             className="relative -top-2 right-0 hidden sm:block md:-top-1"
             data-aos="fade-left"

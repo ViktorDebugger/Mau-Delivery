@@ -49,10 +49,6 @@ const Cart = () => {
     setIsOpen((o) => !o);
   };
 
-  const findDish = (dishId: string) => {
-    return cart.find((item) => item.dishId === dishId);
-  };
-
   const handleIncreaseQuantity = (dishId: string) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -60,7 +56,6 @@ const Cart = () => {
           ? {
               ...item,
               quantity: item.quantity + 1,
-              price: (findDish(item.dishId)?.price || 0) * (item.quantity + 1),
             }
           : item,
       ),
@@ -75,8 +70,6 @@ const Cart = () => {
             ? {
                 ...item,
                 quantity: item.quantity - 1,
-                price:
-                  (findDish(item.dishId)?.price || 0) * (item.quantity - 1),
               }
             : item,
         )
@@ -135,7 +128,7 @@ const Cart = () => {
                       className="flex justify-between gap-1 rounded-2xl bg-[#FBE7BB] p-2 text-2xl"
                     >
                       <div className="flex gap-4">
-                        <div className="relative h-16 w-16 overflow-hidden">
+                        <figure className="relative h-16 w-16 overflow-hidden">
                           <Image
                             className="rounded-2xl object-cover"
                             src={item.image}
@@ -143,10 +136,10 @@ const Cart = () => {
                             fill
                             sizes="64px"
                           />
-                        </div>
+                        </figure>
                         <div>
                           <h1 className="line-clamp-1">{item.name}</h1>
-                          <p>{item.price} UAN</p>
+                          <p>{item.price * item.quantity} UAN</p>
                         </div>
                       </div>
 
@@ -183,7 +176,11 @@ const Cart = () => {
                 <div className="flex justify-between">
                   <p>Total price</p>
                   <p className="font-bold">
-                    {cart.reduce((accum, cur) => accum + cur.price, 0)} UAN
+                    {cart.reduce(
+                      (accum, cur) => accum + cur.price * cur.quantity,
+                      0,
+                    )}
+                    UAN
                   </p>
                 </div>
                 <div className="flex justify-between">
