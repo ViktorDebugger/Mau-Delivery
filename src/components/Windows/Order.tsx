@@ -223,14 +223,14 @@ const Order = ({ handleClose }: WindowDishesProps) => {
   }, [cart, handleClose]);
 
   return (
-    <div className="custom-scrollbar-1 grid h-[calc(100vh-100px)] grid-cols-1 gap-8 overflow-y-auto text-2xl md:grid-cols-2">
+    <div className="custom-scrollbar-1 h-[calc(100vh-100px)] flex flex-col-reverse md:flex-row gap-8 overflow-y-auto text-2xl">
       <button
         onClick={handleClose}
         className="absolute top-2 right-2 block lg:hidden"
       >
         <X size={32} />
       </button>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col w-5/10 items-center">
         <div className="z-1 flex h-[500px] w-full flex-col justify-between gap-2 rounded-4xl bg-[#F2680F] p-4">
           {cart.length && (
             <>
@@ -328,7 +328,7 @@ const Order = ({ handleClose }: WindowDishesProps) => {
         </button>
       </div>
 
-      <div className="flex flex-col text-xl">
+      <div className="flex flex-col w-5/10 text-xl">
         <div className="grid grid-cols-2 gap-4">
           <input
             type="text"
