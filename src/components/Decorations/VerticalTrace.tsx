@@ -1,6 +1,6 @@
 import Image from "next/image";
-import rightTrace from "../../../public/images/bg-items/right-trace.png";
-import leftTrace from "../../../public/images/bg-items/left-trace.png";
+import rightTrace from "@/assets/images/bg-items/right-trace.png";
+import leftTrace from "@/assets/images/bg-items/left-trace.png";
 
 const VerticalTrace = () => {
   return (

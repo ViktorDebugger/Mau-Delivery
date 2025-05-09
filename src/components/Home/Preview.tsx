@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Quotes from "@/components/Decorations/Quotes";
-import delivery from "../../../public/images/bg-items/meow-delivery.png";
-import bgItem01 from "../../../public/images/bg-items/bg-item-1.png";
-import bgItem02 from "../../../public/images/bg-items/bg-item-2.png";
-import bgItem08 from "../../../public/images/bg-items/bg-item-8.png";
+import delivery from "@/assets/images/bg-items/meow-delivery.png";
+import bgItem01 from "@/assets/images/bg-items/bg-item-1.png";
+import bgItem02 from "@/assets/images/bg-items/bg-item-2.png";
+import bgItem08 from "@/assets/images/bg-items/bg-item-8.png";
 
 const Preview = () => {
   const handleScroll = () => {

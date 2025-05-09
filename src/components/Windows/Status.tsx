@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { X } from "lucide-react";
-import status from "../../../public/images/bg-items/status.png";
+import status from "@/assets/images/bg-items/status.png";
 import { userIcon } from "@/types/user.types";
 
 interface WindowStatusProps {

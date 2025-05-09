@@ -9,7 +9,7 @@ import Window from "../Windows/Window";
 import Dishes from "../Windows/Dishes";
 import Restaurants from "../Windows/Restaurants";
 import Order from "../Windows/Order";
-import logo from "../../../public/images/logo.png";
+import logo from "@/assets/images/logo.png";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { usePathname } from "next/navigation";

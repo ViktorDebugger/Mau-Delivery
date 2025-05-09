@@ -7,7 +7,7 @@ import { MoonLoader } from "react-spinners";
 import ReviewsSlider from "@/components/Other/ReviewsSlider";
 import HorizontalTrace from "@/components/Decorations/HorizontalTrace";
 import CardDish from "@/components/Other/CardDish";
-import bgItem05 from "../../../../../public/images/bg-items/bg-item-5.png";
+import bgItem05 from "@/assets/images/bg-items/bg-item-5.png";
 import { getRestaurantById } from "@/db/Restaurant";
 import type { RestaurantType } from "@/types/restaurant.types";
 import type { DishType } from "@/types/dish.types";

@@ -13,7 +13,7 @@ import Calories from "@/components/Menu/Calories";
 import Ingredients from "@/components/Menu/Ingredients";
 import ReviewsSlider from "@/components/Other/ReviewsSlider";
 import HorizontalTrace from "@/components/Decorations/HorizontalTrace";
-import bgItem05 from "../../../../../public/images/bg-items/bg-item-5.png";
+import bgItem05 from "@/assets/images/bg-items/bg-item-5.png";
 import { getDishById } from "@/db/Dish";
 import type { DishType } from "@/types/dish.types";
 import type { CartItemType } from "@/types/cart.types";

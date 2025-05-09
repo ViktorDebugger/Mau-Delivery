@@ -8,7 +8,7 @@ import { MoonLoader } from "react-spinners";
 import Quotes from "@/components/Decorations/Quotes";
 import HorizontalTrace from "@/components/Decorations/HorizontalTrace";
 import Order from "@/components/Other/Order";
-import bgItem from "../../../../../public/images/bg-items/bg-item-7.png";
+import bgItem from "@/assets/images/bg-items/bg-item-7.png";
 import { userIcon, type UserData } from "@/types/user.types";
 import { getUserData } from "@/db/User";
 import { useAuth } from "@/context/AuthContext";

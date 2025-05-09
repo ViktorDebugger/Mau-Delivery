@@ -10,9 +10,9 @@ import {
   faTelegram,
   faFacebook,
 } from "@fortawesome/free-brands-svg-icons";
-import cats from "../../../public/images/bg-items/cats.png";
-import bgItem04 from "../../../public/images/bg-items/bg-item-4.png";
-import logo from "../../../public/images/logo.png";
+import cats from "@/assets/images/bg-items/cats.png";
+import bgItem04 from "@/assets/images/bg-items/bg-item-4.png";
+import logo from "@/assets/images/logo.png";
 
 const Footer = () => {
   const pathname = usePathname();

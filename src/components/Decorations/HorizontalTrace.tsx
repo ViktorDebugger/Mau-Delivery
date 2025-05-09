@@ -1,6 +1,6 @@
 import Image from "next/image";
-import topTrace from "../../../public/images/bg-items/top-trace.png";
-import downTrace from "../../../public/images/bg-items/down-trace.png";
+import topTrace from "@/assets/images/bg-items/top-trace.png";
+import downTrace from "@/assets/images/bg-items/down-trace.png";
 
 const HorizontalTrace = () => {
   return (
