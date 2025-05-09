@@ -2,7 +2,7 @@ import Preview from "@/components/Home/Preview";
 import Top from "@/components/Home/Top";
 import Team from "@/components/Home/Team";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div className="mt-[100px]">
       <Preview />
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
