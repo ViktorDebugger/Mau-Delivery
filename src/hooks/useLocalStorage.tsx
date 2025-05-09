@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 
-const useLocalStorage = <T>(key: string, initialValue: T) => {
+function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+): [T, (value: T | ((val: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === "undefined") {
       return initialValue;
@@ -47,7 +50,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
     }
   }, [key]);
 
-  return [storedValue, setValue] as const;
+  return [storedValue, setValue];
 }
 
 export default useLocalStorage;
