@@ -49,7 +49,7 @@ const Ingredients = ({ ingradients }: CaloriesProps) => {
                 key={ingradient}
                 className="flex justify-between rounded-2xl bg-[#F2680F] px-2 py-1"
               >
-                <span>{ingradient} kcal</span>
+                <span>{ingradient}</span>
               </li>
             ))}
           </ul>
